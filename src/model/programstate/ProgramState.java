@@ -54,6 +54,11 @@ public class ProgramState
         return program;
     }
 
+    public boolean isFinished()
+    {
+        return executionStack.isEmpty();
+    }
+
     @Override
     public String toString()
     {

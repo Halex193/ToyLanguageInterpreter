@@ -1,5 +1,6 @@
 package controller;
 
+import exceptions.ProgramException;
 import exceptions.ProgramFinishedException;
 import model.programstate.IApplicationStack;
 import model.programstate.ProgramState;
@@ -19,10 +20,9 @@ public class Controller
 
     public ProgramState oneStep(ProgramState programState)
     {
-        IApplicationStack<Statement> executionStack = programState.getExecutionStack();
-        if (executionStack.isEmpty())
+        if (programState.isFinished())
             throw new ProgramFinishedException();
-        Statement currentStatement = executionStack.pop();
+        Statement currentStatement = programState.getExecutionStack().pop();
         if (DISPLAY)
         {
             System.out.format(
@@ -31,7 +31,18 @@ public class Controller
                     currentStatement.toString()
             );
         }
-        return currentStatement.execute(programState);
+        try
+        {
+            return currentStatement.execute(programState);
+        }
+        catch (ProgramException exception)
+        {
+            if(DISPLAY)
+            {
+                System.out.println("Program finished with error: \n" + exception);
+            }
+            return null;
+        }
     }
 
     public void allStep()
@@ -45,7 +56,8 @@ public class Controller
         }
         while (!programState.getExecutionStack().isEmpty())
         {
-            oneStep(programState);
+            if(oneStep(programState) == null)
+                return;
             if (DISPLAY)
             {
                 System.out.println(programState);
