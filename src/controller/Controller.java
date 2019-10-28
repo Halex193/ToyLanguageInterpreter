@@ -58,7 +58,7 @@ public class Controller
             System.out.print(programState);
             System.out.println("------------------------");
         }
-        while (!programState.getExecutionStack().isEmpty())
+        while (!programState.isFinished())
         {
             if (oneStep(programState) == null)
                 return;

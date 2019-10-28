@@ -15,7 +15,7 @@ public class ProgramState
         this.executionStack = new ApplicationStack<>();
         this.symbolTable = new ApplicationDictionary<>();
         this.programOutput = new ApplicationList<>();
-        this.program = program;
+        this.program = program.deepCopy();
         this.executionStack.push(program);
 
     }
@@ -30,7 +30,7 @@ public class ProgramState
         this.executionStack = executionStack;
         this.symbolTable = symbolTable;
         this.programOutput = programOutput;
-        this.program = program;
+        this.program = program.deepCopy();
         this.executionStack.push(program);
     }
 
