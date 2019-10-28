@@ -3,6 +3,7 @@ package model.expressions;
 import exceptions.DivisionByZeroException;
 import exceptions.OperatorNotSupportedException;
 import exceptions.OperatorNotValidException;
+import exceptions.ProgramException;
 import model.programstate.IApplicationDictionary;
 import model.types.IntType;
 import model.values.IntValue;
@@ -21,8 +22,15 @@ public class ArithmeticExpression implements Expression
         this.operator = operator;
     }
 
+    public ArithmeticExpression(Expression expression1, Expression expression2, String operator)
+    {
+        this.expression1 = expression1;
+        this.expression2 = expression2;
+        this.operator = stringToOperator(operator);
+    }
+
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable)
+    public Value evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
     {
         Value value1 = expression1.evaluate(symbolTable);
         if (!value1.getType().equals(new IntType()))
@@ -51,6 +59,12 @@ public class ArithmeticExpression implements Expression
         throw new OperatorNotValidException(operator);
     }
 
+    @Override
+    public Expression deepCopy()
+    {
+        return new ArithmeticExpression(expression1.deepCopy(), expression2.deepCopy(), operator);
+    }
+
     public static String operatorToString(int operator)
     {
         switch (operator)
@@ -64,7 +78,22 @@ public class ArithmeticExpression implements Expression
             case 4:
                 return "/";
         }
-        throw new OperatorNotValidException(operator);
+        return Integer.toString(operator);
+    }
+    public static int stringToOperator(String operator)
+    {
+        switch (operator)
+        {
+            case "+":
+                return 1;
+            case "-":
+                return 2;
+            case "*":
+                return 3;
+            case "/":
+                return 4;
+        }
+        return 0;
     }
 
     @Override

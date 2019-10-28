@@ -1,5 +1,6 @@
 package model.statements;
 
+import exceptions.ProgramException;
 import exceptions.TypeMismatchException;
 import exceptions.VariableNotDeclaredException;
 import model.expressions.Expression;
@@ -19,7 +20,7 @@ public class AssignStatement implements Statement
     }
 
     @Override
-    public ProgramState execute(ProgramState programState)
+    public ProgramState execute(ProgramState programState) throws ProgramException
     {
         IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable();
         Value lookup = symbolTable.lookup(id);
@@ -32,6 +33,12 @@ public class AssignStatement implements Statement
 
         symbolTable.update(id, expressionValue);
         return programState;
+    }
+
+    @Override
+    public Statement deepCopy()
+    {
+        return new AssignStatement(id, expression.deepCopy());
     }
 
     @Override

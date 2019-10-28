@@ -1,12 +1,12 @@
 package model.programstate;
 
-import java.util.EmptyStackException;
+import exceptions.EmptyApplicationStackException;
 
 public interface IApplicationStack<T>
 {
     void push(T element);
 
-    T pop() throws EmptyStackException;
+    T pop() throws EmptyApplicationStackException;
 
     int size();
 

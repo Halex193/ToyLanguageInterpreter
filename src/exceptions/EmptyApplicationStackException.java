@@ -1,5 +1,5 @@
 package exceptions;
 
-public class EmptyApplicationStackException extends ProgramException
+public class EmptyApplicationStackException extends RuntimeException
 {
 }

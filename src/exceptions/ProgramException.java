@@ -1,6 +1,6 @@
 package exceptions;
 
-public class ProgramException extends RuntimeException
+public class ProgramException extends Exception
 {
     public ProgramException()
     {

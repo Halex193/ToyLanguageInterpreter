@@ -22,4 +22,10 @@ public class BoolType implements Type
     {
         return new BoolValue();
     }
+
+    @Override
+    public Type deepCopy()
+    {
+        return new BoolType();
+    }
 }

@@ -6,6 +6,8 @@ import model.statements.Statement;
 import repository.IRepository;
 import repository.Repository;
 
+import java.util.Scanner;
+
 import static view.ProgramUtils.generatePrograms;
 
 public class Main
@@ -14,9 +16,17 @@ public class Main
     {
         IRepository repository = new Repository();
         Controller controller = new Controller(repository);
-        Statement program = generatePrograms().get(0);
-        ProgramState programState = new ProgramState(program);
-        repository.setCurrentProgram(programState);
-        controller.allStep();
+        Scanner scanner = new Scanner(System.in);
+        while (true)
+        {
+            System.out.print("\n\u2022 Number of program: ");
+            int programNumber = scanner.nextInt();
+            if (programNumber == -1) return;
+            System.out.println();
+            Statement program = generatePrograms().get(programNumber);
+            ProgramState programState = new ProgramState(program);
+            repository.setCurrentProgram(programState);
+            controller.allStep();
+        }
     }
 }

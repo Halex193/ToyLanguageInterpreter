@@ -9,7 +9,7 @@ import repository.IRepository;
 
 public class Controller
 {
-    public static final boolean DISPLAY = true;
+    private static final boolean DISPLAY = true;
 
     private IRepository repository;
 
@@ -23,23 +23,27 @@ public class Controller
         if (programState.isFinished())
             throw new ProgramFinishedException();
         Statement currentStatement = programState.getExecutionStack().pop();
-        if (DISPLAY)
-        {
-            System.out.format(
-                    "Executed %s: %s\n",
-                    currentStatement.getClass().getSimpleName(),
-                    currentStatement.toString()
-            );
-        }
         try
         {
-            return currentStatement.execute(programState);
+            ProgramState newProgramState = currentStatement.execute(programState);
+            if (DISPLAY)
+            {
+                System.out.format(
+                        "Executed %s: %s\n",
+                        currentStatement.getClass().getSimpleName(),
+                        currentStatement.toString()
+                );
+
+                System.out.print(programState);
+                System.out.println("------------------------");
+            }
+            return newProgramState;
         }
         catch (ProgramException exception)
         {
-            if(DISPLAY)
+            if (DISPLAY)
             {
-                System.out.println("Program finished with error: \n" + exception);
+                System.err.println("Program finished with error: \n" + exception);
             }
             return null;
         }
@@ -50,19 +54,16 @@ public class Controller
         ProgramState programState = repository.getCurrentProgram();
         if (DISPLAY)
         {
-            System.out.format("Executing program : %s\n\n", programState.getProgram());
-            System.out.println(programState);
+            System.out.format("Executing program : %s\n", programState.getProgram());
+            System.out.print(programState);
             System.out.println("------------------------");
         }
         while (!programState.getExecutionStack().isEmpty())
         {
-            if(oneStep(programState) == null)
+            if (oneStep(programState) == null)
                 return;
-            if (DISPLAY)
-            {
-                System.out.println(programState);
-                System.out.println("------------------------");
-            }
         }
+
+        System.out.println("Program execution finished");
     }
 }

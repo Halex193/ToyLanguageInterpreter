@@ -1,6 +1,5 @@
 package model.statements;
 
-import model.programstate.ApplicationStack;
 import model.programstate.IApplicationStack;
 import model.programstate.ProgramState;
 
@@ -22,6 +21,12 @@ public class CompoundStatement implements Statement
         executionStack.push(secondStatement);
         executionStack.push(firstStatement);
         return programState;
+    }
+
+    @Override
+    public Statement deepCopy()
+    {
+        return new CompoundStatement(firstStatement.deepCopy(), secondStatement.deepCopy());
     }
 
     @Override

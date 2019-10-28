@@ -2,6 +2,7 @@ package model.expressions;
 
 import exceptions.OperatorNotSupportedException;
 import exceptions.OperatorNotValidException;
+import exceptions.ProgramException;
 import model.programstate.IApplicationDictionary;
 import model.types.BoolType;
 import model.values.BoolValue;
@@ -20,8 +21,15 @@ public class LogicExpression implements Expression
         this.operator = operator;
     }
 
+    public LogicExpression(Expression expression1, Expression expression2, String operator)
+    {
+        this.expression1 = expression1;
+        this.expression2 = expression2;
+        this.operator = stringToOperator(operator);
+    }
+
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable)
+    public Value evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
     {
         Value value1 = expression1.evaluate(symbolTable);
         if (!value1.getType().equals(new BoolType()))
@@ -44,6 +52,12 @@ public class LogicExpression implements Expression
         throw new OperatorNotValidException(operator);
     }
 
+    @Override
+    public Expression deepCopy()
+    {
+        return new LogicExpression(expression1.deepCopy(), expression2.deepCopy(), operator);
+    }
+
     public static String operatorToString(int operator)
     {
         switch (operator)
@@ -53,7 +67,19 @@ public class LogicExpression implements Expression
             case 2:
                 return "or";
         }
-        throw new OperatorNotValidException(operator);
+        return Integer.toString(operator);
+    }
+
+    public static int stringToOperator(String operator)
+    {
+        switch (operator)
+        {
+            case "and":
+                return 1;
+            case "or":
+                return 2;
+        }
+        return 0;
     }
 
     @Override

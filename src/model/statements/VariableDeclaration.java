@@ -1,5 +1,6 @@
 package model.statements;
 
+import exceptions.ProgramException;
 import exceptions.VariableAlreadyDeclaredException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.ProgramState;
@@ -18,7 +19,7 @@ public class VariableDeclaration implements Statement
     }
 
     @Override
-    public ProgramState execute(ProgramState programState)
+    public ProgramState execute(ProgramState programState) throws ProgramException
     {
         IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable();
 
@@ -27,6 +28,12 @@ public class VariableDeclaration implements Statement
 
         symbolTable.update(id, type.defaultValue());
         return programState;
+    }
+
+    @Override
+    public Statement deepCopy()
+    {
+        return new VariableDeclaration(type.deepCopy(), id);
     }
 
     @Override

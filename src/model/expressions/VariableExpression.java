@@ -14,12 +14,18 @@ public class VariableExpression implements Expression
     }
 
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable)
+    public Value evaluate(IApplicationDictionary<String, Value> symbolTable) throws VariableNotDeclared
     {
         Value lookup = symbolTable.lookup(id);
         if (lookup == null)
             throw new VariableNotDeclared(id);
         return lookup;
+    }
+
+    @Override
+    public Expression deepCopy()
+    {
+        return new VariableExpression(id);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package model.statements;
 
 import exceptions.ConditionNotBoolean;
+import exceptions.ProgramException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationStack;
@@ -27,7 +28,7 @@ public class IfStatement implements Statement
     }
 
     @Override
-    public ProgramState execute(ProgramState programState)
+    public ProgramState execute(ProgramState programState) throws ProgramException
     {
         IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable();
         IApplicationStack<Statement> executionStack = programState.getExecutionStack();
@@ -45,6 +46,12 @@ public class IfStatement implements Statement
             executionStack.push(elseStatement);
         }
         return programState;
+    }
+
+    @Override
+    public Statement deepCopy()
+    {
+        return new IfStatement(condition.deepCopy(), thenStatement.deepCopy(), elseStatement.deepCopy());
     }
 
     @Override

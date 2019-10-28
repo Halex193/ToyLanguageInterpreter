@@ -11,6 +11,12 @@ public class NOPStatement implements Statement
     }
 
     @Override
+    public Statement deepCopy()
+    {
+        return new NOPStatement();
+    }
+
+    @Override
     public String toString()
     {
         return "nop";
