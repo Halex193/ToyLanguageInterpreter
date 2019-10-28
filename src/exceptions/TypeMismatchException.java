@@ -4,14 +4,14 @@ import model.values.Value;
 
 public class TypeMismatchException extends ProgramException
 {
-    public TypeMismatchException(Value lookup, Value expressionValue)
+    public TypeMismatchException(String variable, Value lookup, Value expressionValue)
     {
         super(String.format(
-                "%s %s was assigned to %s %s",
-                lookup.getType().toString(),
+                "Variable %s of type %s was assigned to value %s of type %s",
+                variable,
                 lookup.toString(),
-                expressionValue.getType().toString(),
-                expressionValue.toString()
+                expressionValue.toString(),
+                expressionValue.getType().toString()
         ));
     }
 }

@@ -43,7 +43,7 @@ public class Controller
         {
             if (DISPLAY)
             {
-                System.err.println("Program finished with error: \n" + exception);
+                System.err.println(exception);
             }
             return null;
         }

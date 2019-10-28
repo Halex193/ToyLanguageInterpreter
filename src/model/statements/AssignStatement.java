@@ -29,7 +29,7 @@ public class AssignStatement implements Statement
 
         Value expressionValue = expression.evaluate(symbolTable);
         if(!lookup.getType().equals(expressionValue.getType()))
-            throw new TypeMismatchException(lookup, expressionValue);
+            throw new TypeMismatchException(id, lookup, expressionValue);
 
         symbolTable.update(id, expressionValue);
         return programState;
