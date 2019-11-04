@@ -6,23 +6,24 @@ import exceptions.OperatorNotValidException;
 import exceptions.ProgramException;
 import model.programstate.IApplicationDictionary;
 import model.types.IntType;
+import model.values.BoolValue;
 import model.values.IntValue;
 import model.values.Value;
 
-public class ArithmeticExpression implements Expression
+public class RelationalExpression implements Expression
 {
     private Expression expression1;
     private Expression expression2;
     private int operator;
 
-    public ArithmeticExpression(Expression expression1, Expression expression2, int operator)
+    public RelationalExpression(Expression expression1, Expression expression2, int operator)
     {
         this.expression1 = expression1;
         this.expression2 = expression2;
         this.operator = operator;
     }
 
-    public ArithmeticExpression(Expression expression1, Expression expression2, String operator)
+    public RelationalExpression(Expression expression1, Expression expression2, String operator)
     {
         this.expression1 = expression1;
         this.expression2 = expression2;
@@ -30,7 +31,7 @@ public class ArithmeticExpression implements Expression
     }
 
     @Override
-    public IntValue evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
+    public BoolValue evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
     {
         Value value1 = expression1.evaluate(symbolTable);
         if (!value1.getType().equals(new IntType()))
@@ -46,15 +47,17 @@ public class ArithmeticExpression implements Expression
         switch (operator)
         {
             case 1:
-                return new IntValue(number1 + number2);
+                return new BoolValue(number1 < number2);
             case 2:
-                return new IntValue(number1 - number2);
+                return new BoolValue(number1 <= number2);
             case 3:
-                return new IntValue(number1 * number2);
+                return new BoolValue(number1 == number2);
             case 4:
-                if (number2 == 0)
-                    throw new DivisionByZeroException();
-                return new IntValue(number1 / number2);
+                return new BoolValue(number1 != number2);
+            case 5:
+                return new BoolValue(number1 > number2);
+            case 6:
+                return new BoolValue(number1 >= number2);
         }
         throw new OperatorNotValidException(operator);
     }
@@ -62,7 +65,7 @@ public class ArithmeticExpression implements Expression
     @Override
     public Expression deepCopy()
     {
-        return new ArithmeticExpression(expression1.deepCopy(), expression2.deepCopy(), operator);
+        return new RelationalExpression(expression1.deepCopy(), expression2.deepCopy(), operator);
     }
 
     public static String operatorToString(int operator)
@@ -70,28 +73,37 @@ public class ArithmeticExpression implements Expression
         switch (operator)
         {
             case 1:
-                return "+";
+                return "<";
             case 2:
-                return "-";
+                return "<=";
             case 3:
-                return "*";
+                return "==";
             case 4:
-                return "/";
+                return "!=";
+            case 5:
+                return ">";
+            case 6:
+                return ">=";
         }
         return Integer.toString(operator);
     }
+
     public static int stringToOperator(String operator)
     {
         switch (operator)
         {
-            case "+":
+            case "<":
                 return 1;
-            case "-":
+            case "<=":
                 return 2;
-            case "*":
+            case "==":
                 return 3;
-            case "/":
+            case "!=":
                 return 4;
+            case ">":
+                return 5;
+            case ">=":
+                return 6;
         }
         return 0;
     }

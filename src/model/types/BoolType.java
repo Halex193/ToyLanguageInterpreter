@@ -18,7 +18,7 @@ public class BoolType implements Type
     }
 
     @Override
-    public Value defaultValue()
+    public BoolValue defaultValue()
     {
         return new BoolValue();
     }

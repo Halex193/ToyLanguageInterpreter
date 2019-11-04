@@ -8,4 +8,6 @@ public interface IApplicationDictionary<K, V>
     V lookup(K key);
 
     void update(K key, V value);
+
+    void remove(K key);
 }

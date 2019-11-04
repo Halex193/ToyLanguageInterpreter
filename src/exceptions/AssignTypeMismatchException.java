@@ -2,9 +2,9 @@ package exceptions;
 
 import model.values.Value;
 
-public class TypeMismatchException extends ProgramException
+public class AssignTypeMismatchException extends ProgramException
 {
-    public TypeMismatchException(Value lookup, Value expressionValue)
+    public AssignTypeMismatchException(Value lookup, Value expressionValue)
     {
         super(String.format(
                 "%s %s was assigned to %s %s",

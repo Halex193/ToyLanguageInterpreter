@@ -29,7 +29,7 @@ public class LogicExpression implements Expression
     }
 
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
+    public BoolValue evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
     {
         Value value1 = expression1.evaluate(symbolTable);
         if (!value1.getType().equals(new BoolType()))

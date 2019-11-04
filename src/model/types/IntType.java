@@ -18,7 +18,7 @@ public class IntType implements Type
     }
 
     @Override
-    public Value defaultValue()
+    public IntValue defaultValue()
     {
         return new IntValue();
     }

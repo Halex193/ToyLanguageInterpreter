@@ -49,7 +49,11 @@ public class ApplicationStack<T> implements IApplicationStack<T>
     @Override
     public String toString()
     {
-        StringJoiner joiner = new StringJoiner("|", "{", "}");
+        if (stack.isEmpty())
+        {
+            return "\u2205";
+        }
+        StringJoiner joiner = new StringJoiner("\n");
         List<T> list = new LinkedList<>(stack);
         Collections.reverse(list);
         list.forEach((element) -> joiner.add(element.toString()));
