@@ -4,6 +4,7 @@ import exceptions.OperatorNotSupportedException;
 import exceptions.OperatorNotValidException;
 import exceptions.ProgramException;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.types.BoolType;
 import model.values.BoolValue;
 import model.values.Value;
@@ -29,13 +30,13 @@ public class LogicExpression implements Expression
     }
 
     @Override
-    public BoolValue evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
+    public BoolValue evaluate(IApplicationDictionary<String, Value> symbolTable, IApplicationHeap<Value> heap) throws ProgramException
     {
-        Value value1 = expression1.evaluate(symbolTable);
+        Value value1 = expression1.evaluate(symbolTable, heap);
         if (!value1.getType().equals(new BoolType()))
             throw new OperatorNotSupportedException(value1, operator);
 
-        Value value2 = expression2.evaluate(symbolTable);
+        Value value2 = expression2.evaluate(symbolTable, heap);
         if (!value2.getType().equals(new BoolType()))
             throw new OperatorNotSupportedException(value2, operator);
 

@@ -6,6 +6,7 @@ import exceptions.ProgramException;
 import exceptions.VariableNotDeclaredException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
 import model.types.IntType;
 import model.types.StringType;
@@ -32,6 +33,7 @@ public class ReadFileStatement implements Statement
     {
         IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable();
         IApplicationDictionary<String, BufferedReader> fileTable = programState.getFileTable();
+        IApplicationHeap<Value> heap = programState.getHeap();
 
         Value variableValue = symbolTable.lookup(id);
         if (variableValue == null)
@@ -44,7 +46,7 @@ public class ReadFileStatement implements Statement
             throw new ParameterTypeMismatchException(new IntType(), variableValue);
         }
 
-        Value expressionValue = fileNameExpression.evaluate(symbolTable);
+        Value expressionValue = fileNameExpression.evaluate(symbolTable, heap);
         if (!expressionValue.getType().equals(new StringType()))
         {
             throw new ParameterTypeMismatchException(new StringType(), expressionValue);

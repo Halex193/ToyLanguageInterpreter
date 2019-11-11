@@ -10,6 +10,7 @@ public class ProgramState
     private IApplicationDictionary<String, Value> symbolTable;
     private IApplicationList<Value> programOutput;
     private IApplicationDictionary<String, BufferedReader> fileTable;
+    private IApplicationHeap<Value> heap;
     private Statement program;
 
     public ProgramState(Statement program)
@@ -18,6 +19,7 @@ public class ProgramState
         this.symbolTable = new ApplicationDictionary<>();
         this.programOutput = new ApplicationList<>();
         this.fileTable = new ApplicationDictionary<>();
+        this.heap = new ApplicationHeap<>();
         this.program = program.deepCopy();
         this.executionStack.push(program);
 
@@ -27,13 +29,15 @@ public class ProgramState
             IApplicationStack<Statement> executionStack,
             IApplicationDictionary<String, Value> symbolTable,
             IApplicationList<Value> programOutput,
-            IApplicationDictionary<String, BufferedReader> fileTable, Statement program
+            IApplicationDictionary<String, BufferedReader> fileTable, Statement program,
+            IApplicationHeap<Value> heap
     )
     {
         this.executionStack = executionStack;
         this.symbolTable = symbolTable;
         this.programOutput = programOutput;
         this.fileTable = fileTable;
+        this.heap = heap;
         this.program = program.deepCopy();
         this.executionStack.push(program);
     }
@@ -58,6 +62,11 @@ public class ProgramState
         return fileTable;
     }
 
+    public IApplicationHeap<Value> getHeap()
+    {
+        return heap;
+    }
+
     public Statement getProgram()
     {
         return program;
@@ -72,11 +81,12 @@ public class ProgramState
     public String toString()
     {
         return String.format(
-                "Execution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s",
+                "Execution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s",
                 executionStack.toString(),
                 symbolTable.toString(),
                 programOutput.toString(),
-                fileTable.toString()
+                fileTable.toString(),
+                heap.toString()
         );
     }
 }

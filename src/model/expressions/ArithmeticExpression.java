@@ -5,6 +5,7 @@ import exceptions.OperatorNotSupportedException;
 import exceptions.OperatorNotValidException;
 import exceptions.ProgramException;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.types.IntType;
 import model.values.IntValue;
 import model.values.Value;
@@ -30,13 +31,13 @@ public class ArithmeticExpression implements Expression
     }
 
     @Override
-    public IntValue evaluate(IApplicationDictionary<String, Value> symbolTable) throws ProgramException
+    public IntValue evaluate(IApplicationDictionary<String, Value> symbolTable, IApplicationHeap<Value> heap) throws ProgramException
     {
-        Value value1 = expression1.evaluate(symbolTable);
+        Value value1 = expression1.evaluate(symbolTable, heap);
         if (!value1.getType().equals(new IntType()))
             throw new OperatorNotSupportedException(value1, operator);
 
-        Value value2 = expression2.evaluate(symbolTable);
+        Value value2 = expression2.evaluate(symbolTable, heap);
         if (!value2.getType().equals(new IntType()))
             throw new OperatorNotSupportedException(value2, operator);
 

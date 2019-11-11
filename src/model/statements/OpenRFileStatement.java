@@ -5,6 +5,7 @@ import exceptions.ParameterTypeMismatchException;
 import exceptions.ProgramException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
 import model.types.StringType;
 import model.values.StringValue;
@@ -28,8 +29,9 @@ public class OpenRFileStatement implements Statement
     {
         IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable();
         IApplicationDictionary<String, BufferedReader> fileTable = programState.getFileTable();
+        IApplicationHeap<Value> heap = programState.getHeap();
 
-        Value value = fileNameExpression.evaluate(symbolTable);
+        Value value = fileNameExpression.evaluate(symbolTable, heap);
         if (!value.getType().equals(new StringType()))
         {
             throw new ParameterTypeMismatchException(new StringType(), value);

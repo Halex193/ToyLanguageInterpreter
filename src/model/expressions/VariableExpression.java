@@ -2,6 +2,7 @@ package model.expressions;
 
 import exceptions.VariableNotDeclaredException;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.values.Value;
 
 public class VariableExpression implements Expression
@@ -14,7 +15,7 @@ public class VariableExpression implements Expression
     }
 
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable) throws VariableNotDeclaredException
+    public Value evaluate(IApplicationDictionary<String, Value> symbolTable, IApplicationHeap<Value> heap) throws VariableNotDeclaredException
     {
         Value lookup = symbolTable.lookup(id);
         if (lookup == null)

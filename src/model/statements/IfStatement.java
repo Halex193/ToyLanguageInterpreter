@@ -4,6 +4,7 @@ import exceptions.ConditionNotBoolean;
 import exceptions.ProgramException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.programstate.IApplicationStack;
 import model.programstate.ProgramState;
 import model.types.BoolType;
@@ -32,8 +33,9 @@ public class IfStatement implements Statement
     {
         IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable();
         IApplicationStack<Statement> executionStack = programState.getExecutionStack();
+        IApplicationHeap<Value> heap = programState.getHeap();
 
-        Value conditionValue = condition.evaluate(symbolTable);
+        Value conditionValue = condition.evaluate(symbolTable, heap);
         if (!conditionValue.getType().equals(new BoolType()))
             throw new ConditionNotBoolean(condition);
 
