@@ -1,6 +1,7 @@
 package model.expressions;
 
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.values.Value;
 
 public class ValueExpression implements Expression
@@ -13,7 +14,7 @@ public class ValueExpression implements Expression
     }
 
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable)
+    public Value evaluate(IApplicationDictionary<String, Value> symbolTable, IApplicationHeap<Value> heap)
     {
         return value;
     }

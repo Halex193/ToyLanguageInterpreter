@@ -22,7 +22,11 @@ public class ApplicationList<T> implements IApplicationList<T>
     @Override
     public String toString()
     {
-        StringJoiner joiner = new StringJoiner("|", "{", "}");
+        if (list.isEmpty())
+        {
+            return "\u2205";
+        }
+        StringJoiner joiner = new StringJoiner("\n");
         list.forEach((element) -> joiner.add(element.toString()));
         return joiner.toString();
     }

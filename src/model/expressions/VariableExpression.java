@@ -1,7 +1,8 @@
 package model.expressions;
 
-import exceptions.VariableNotDeclared;
+import exceptions.VariableNotDeclaredException;
 import model.programstate.IApplicationDictionary;
+import model.programstate.IApplicationHeap;
 import model.values.Value;
 
 public class VariableExpression implements Expression
@@ -14,11 +15,11 @@ public class VariableExpression implements Expression
     }
 
     @Override
-    public Value evaluate(IApplicationDictionary<String, Value> symbolTable) throws VariableNotDeclared
+    public Value evaluate(IApplicationDictionary<String, Value> symbolTable, IApplicationHeap<Value> heap) throws VariableNotDeclaredException
     {
         Value lookup = symbolTable.lookup(id);
         if (lookup == null)
-            throw new VariableNotDeclared(id);
+            throw new VariableNotDeclaredException(id);
         return lookup;
     }
 

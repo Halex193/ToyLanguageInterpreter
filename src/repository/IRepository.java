@@ -9,4 +9,6 @@ public interface IRepository
     void setCurrentProgram(ProgramState programState);
 
     ProgramState getProgramState(int number);
+
+    void logProgramState();
 }

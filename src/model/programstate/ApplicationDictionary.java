@@ -26,10 +26,20 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
     }
 
     @Override
+    public void remove(K key)
+    {
+        map.remove(key);
+    }
+
+    @Override
     public String toString()
     {
-        StringJoiner joiner = new StringJoiner("|", "{", "}");
-        map.forEach((key, value) -> joiner.add(key.toString() + " -> " + value.toString()));
+        if (map.isEmpty())
+        {
+            return "\u2205";
+        }
+        StringJoiner joiner = new StringJoiner("\n");
+        map.forEach((key, value) -> joiner.add(key.toString() + " --> " + value.toString()));
         return joiner.toString();
     }
 }
