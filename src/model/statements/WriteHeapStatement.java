@@ -42,13 +42,13 @@ public class WriteHeapStatement implements Statement
         }
 
         ReferenceValue referenceValue = (ReferenceValue) lookup;
-        heap.read(referenceValue.getReferenceAddress());
+        heap.read(referenceValue.getAddress());
 
         if (!referenceValue.getReferencedType().equals(expressionValue.getType()))
         {
             throw new ParameterTypeMismatchException(referenceValue.getReferencedType(), expressionValue);
         }
-        heap.store(referenceValue.getReferenceAddress(), expressionValue);
+        heap.store(referenceValue.getAddress(), expressionValue);
         return programState;
     }
 

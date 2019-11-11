@@ -32,6 +32,12 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
     }
 
     @Override
+    public Map<K, V> getMap()
+    {
+        return map;
+    }
+
+    @Override
     public String toString()
     {
         if (map.isEmpty())

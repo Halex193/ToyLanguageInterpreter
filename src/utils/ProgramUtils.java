@@ -20,7 +20,12 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3());
+        return List.of(program1(), program2(), program3(), program4());
+    }
+
+    private static Statement program4()
+    {
+        return null;//TODO
     }
 
     private static Statement program3()

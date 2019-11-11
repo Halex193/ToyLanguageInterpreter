@@ -52,6 +52,12 @@ public class ApplicationHeap<T> implements IApplicationHeap<T>
     }
 
     @Override
+    public Map<Integer, T> getMap()
+    {
+        return memoryMap;
+    }
+
+    @Override
     public String toString()
     {
         if (memoryMap.isEmpty())
