@@ -35,4 +35,10 @@ public class ReferenceValue implements Value
     {
         return new ReferenceValue(address, referencedType.deepCopy());
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("(%s) %d", getType(), address);
+    }
 }

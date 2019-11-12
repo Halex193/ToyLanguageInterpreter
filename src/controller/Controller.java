@@ -54,7 +54,7 @@ public class Controller
         {
             if (oneStep(programState) == null)
                 return;
-            GarbageCollector.collectGarbage(programState.getHeap(), programState.getSymbolTable());
+//            GarbageCollector.collectGarbage(programState.getHeap(), programState.getSymbolTable());
         }
     }
 }

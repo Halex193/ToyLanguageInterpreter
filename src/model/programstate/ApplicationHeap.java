@@ -65,7 +65,7 @@ public class ApplicationHeap<T> implements IApplicationHeap<T>
             return "\u2205";
         }
         StringJoiner joiner = new StringJoiner("\n");
-        memoryMap.forEach((key, value) -> joiner.add(key.toString() + " --> " + value.toString()));
+        memoryMap.forEach((key, value) -> joiner.add(String.format("%s --> %s", key, value)));
         return joiner.toString();
     }
 }

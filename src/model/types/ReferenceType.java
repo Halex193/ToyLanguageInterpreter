@@ -53,8 +53,8 @@ public class ReferenceType implements Type
     {
         if (referencedType == null)
         {
-            return "Ref";
+            return "ref";
         }
-        return String.format("Ref(%s)", referencedType.toString());
+        return String.format("ref %s", referencedType.toString());
     }
 }
