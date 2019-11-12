@@ -20,7 +20,20 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3(), program4(), program5());
+        return List.of(program1(), program2(), program3(), program4(), program5(), program6());
+    }
+
+    private static Statement program6()
+    {
+        return concatenate(
+                new VariableDeclaration(new ReferenceType(new IntType()), "v"),
+                new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
+                new VariableDeclaration(new ReferenceType(new ReferenceType(new IntType())), "a"),
+                new AllocateHeapStatement("a", new VariableExpression("v")),
+                new AllocateHeapStatement("v", new ValueExpression(new IntValue(30))),
+                new AllocateHeapStatement("v", new ValueExpression(new IntValue(40))),
+                new PrintStatement(new ReadHeapExpression(new ReadHeapExpression(new VariableExpression("a"))))
+        );
     }
 
     private static Statement program5()
