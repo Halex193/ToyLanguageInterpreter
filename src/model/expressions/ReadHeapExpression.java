@@ -26,7 +26,7 @@ public class ReadHeapExpression implements Expression
             throw new ParameterTypeMismatchException(new ReferenceType(), expressionValue);
         }
         ReferenceValue referenceValue = (ReferenceValue) expressionValue;
-        return heap.read(referenceValue.getReferenceAddress());
+        return heap.read(referenceValue.getAddress());
     }
 
     @Override

@@ -5,18 +5,18 @@ import model.types.Type;
 
 public class ReferenceValue implements Value
 {
-    private int referenceAddress;
+    private int address;
     private Type referencedType;
 
-    public ReferenceValue(int referenceAddress, Type referencedType)
+    public ReferenceValue(int address, Type referencedType)
     {
-        this.referenceAddress = referenceAddress;
+        this.address = address;
         this.referencedType = referencedType;
     }
 
-    public int getReferenceAddress()
+    public int getAddress()
     {
-        return referenceAddress;
+        return address;
     }
 
     public Type getReferencedType()
@@ -33,6 +33,12 @@ public class ReferenceValue implements Value
     @Override
     public Value deepCopy()
     {
-        return new ReferenceValue(referenceAddress, referencedType.deepCopy());
+        return new ReferenceValue(address, referencedType.deepCopy());
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("(%s) %d", getType(), address);
     }
 }

@@ -34,13 +34,13 @@ public class AllocateHeapStatement implements Statement
         }
 
         Value expressionValue = expression.evaluate(symbolTable, heap);
-        if (lookup.getType().equals(new ReferenceType(expressionValue.getType())))
+        if (!lookup.getType().equals(new ReferenceType(expressionValue.getType())))
         {
             throw new AssignTypeMismatchException(lookup, expressionValue);
         }
 
         int address = heap.store(expressionValue);
-        symbolTable.update(id, new ReferenceValue(address, lookup.getType()));
+        symbolTable.update(id, new ReferenceValue(address, expressionValue.getType()));
         return programState;
     }
 

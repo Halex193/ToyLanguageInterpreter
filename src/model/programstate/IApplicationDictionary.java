@@ -10,4 +10,6 @@ public interface IApplicationDictionary<K, V>
     void update(K key, V value);
 
     void remove(K key);
+
+    Map<K, V> getMap();
 }

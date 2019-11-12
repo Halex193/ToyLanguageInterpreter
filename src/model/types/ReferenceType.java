@@ -39,13 +39,12 @@ public class ReferenceType implements Type
         if (obj instanceof ReferenceType)
         {
             ReferenceType objReference = (ReferenceType) obj;
-            if (objReference.getReferencedType() == null)
+            if (referencedType == null || objReference.getReferencedType() == null)
             {
                 return true;
             }
             return referencedType.equals(objReference.getReferencedType());
-        }
-        else
+        } else
             return false;
     }
 
@@ -54,8 +53,8 @@ public class ReferenceType implements Type
     {
         if (referencedType == null)
         {
-            return "Ref";
+            return "ref";
         }
-        return String.format("Ref(%s)", referencedType.toString());
+        return String.format("ref %s", referencedType.toString());
     }
 }
