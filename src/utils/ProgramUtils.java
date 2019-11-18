@@ -20,7 +20,26 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3(), program4(), program5(), program6());
+        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7());
+    }
+
+    private static Statement program7()
+    {
+        return concatenate(
+                new VariableDeclaration(new IntType(), "i"),
+                new AssignStatement("i", new ValueExpression(new IntValue(0))),
+                new WhileStatement(
+                        new RelationalExpression(new VariableExpression("i"), new ValueExpression(new IntValue(5)), "<"),
+                        new CompoundStatement(
+                                new PrintStatement(new VariableExpression("i")),
+                                new AssignStatement("i", new ArithmeticExpression(
+                                        new VariableExpression("i"),
+                                        new ValueExpression(new IntValue(1)),
+                                        "+"
+                                ))
+                        )
+                )
+        );
     }
 
     private static Statement program6()

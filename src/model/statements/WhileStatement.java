@@ -33,8 +33,8 @@ public class WhileStatement implements Statement
         BoolValue conditionBoolean = (BoolValue) conditionValue;
         if(conditionBoolean.getValue())
         {
-            executionStack.push(statement);
             executionStack.push(this);
+            executionStack.push(statement);
         }
         return programState;
     }
