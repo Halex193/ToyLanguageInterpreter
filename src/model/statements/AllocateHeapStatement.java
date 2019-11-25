@@ -41,7 +41,7 @@ public class AllocateHeapStatement implements Statement
 
         int address = heap.store(expressionValue);
         symbolTable.update(id, new ReferenceValue(address, expressionValue.getType()));
-        return programState;
+        return null;
     }
 
     @Override

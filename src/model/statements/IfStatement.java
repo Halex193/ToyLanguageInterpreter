@@ -47,7 +47,7 @@ public class IfStatement implements Statement
         {
             executionStack.push(elseStatement);
         }
-        return programState;
+        return null;
     }
 
     @Override

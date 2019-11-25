@@ -1,7 +1,10 @@
 package model.programstate;
 
+import exceptions.ProgramException;
+import exceptions.ProgramFinishedException;
 import model.statements.Statement;
 import model.values.Value;
+
 import java.io.BufferedReader;
 
 public class ProgramState
@@ -12,9 +15,12 @@ public class ProgramState
     private IApplicationDictionary<String, BufferedReader> fileTable;
     private IApplicationHeap<Value> heap;
     private Statement program;
+    private int id;
+    private static int idSeed = 1;
 
     public ProgramState(Statement program)
     {
+        this.id = generateId();
         this.executionStack = new ApplicationStack<>();
         this.symbolTable = new ApplicationDictionary<>();
         this.programOutput = new ApplicationList<>();
@@ -29,10 +35,12 @@ public class ProgramState
             IApplicationStack<Statement> executionStack,
             IApplicationDictionary<String, Value> symbolTable,
             IApplicationList<Value> programOutput,
-            IApplicationDictionary<String, BufferedReader> fileTable, Statement program,
-            IApplicationHeap<Value> heap
+            IApplicationDictionary<String, BufferedReader> fileTable,
+            IApplicationHeap<Value> heap,
+            Statement program
     )
     {
+        this.id = generateId();
         this.executionStack = executionStack;
         this.symbolTable = symbolTable;
         this.programOutput = programOutput;
@@ -40,6 +48,11 @@ public class ProgramState
         this.heap = heap;
         this.program = program.deepCopy();
         this.executionStack.push(program);
+    }
+
+    private static synchronized int generateId()
+    {
+        return idSeed++;
     }
 
     public IApplicationStack<Statement> getExecutionStack()
@@ -72,16 +85,30 @@ public class ProgramState
         return program;
     }
 
-    public boolean isFinished()
+    public int getId()
     {
-        return executionStack.isEmpty();
+        return id;
+    }
+
+    public boolean isNotCompleted()
+    {
+        return !executionStack.isEmpty();
+    }
+
+    public ProgramState oneStep() throws ProgramException
+    {
+        if (this.isNotCompleted())
+            throw new ProgramFinishedException();
+        Statement currentStatement = executionStack.pop();
+        return currentStatement.execute(this);
     }
 
     @Override
     public String toString()
     {
         return String.format(
-                "Execution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s",
+                "Program State ID: %d\nExecution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s",
+                id,
                 executionStack.toString(),
                 symbolTable.toString(),
                 programOutput.toString(),

@@ -20,32 +20,11 @@ public class Repository implements IRepository
     {
         this.logFilePath = logFilePath;
         programStates = new ArrayList<>(1);
-        setCurrentProgram(programState);
+        programStates.add(programState);
     }
 
     @Override
-    public ProgramState getCurrentProgram()
-    {
-        return programStates.get(0);
-    }
-
-    @Override
-    public void setCurrentProgram(ProgramState programState)
-    {
-        if (programStates.isEmpty())
-            programStates.add(programState);
-        else
-            programStates.set(0, programState);
-    }
-
-    @Override
-    public ProgramState getProgramState(int number)
-    {
-        return programStates.get(number);
-    }
-
-    @Override
-    public void logProgramState()
+    public void logProgramState(ProgramState programState)
     {
         if (logFilePath == null)
         {
@@ -54,7 +33,6 @@ public class Repository implements IRepository
         try(FileWriter fileWriter = new FileWriter(logFilePath, true))
         {
             PrintWriter printWriter = new PrintWriter(new BufferedWriter(fileWriter));
-            ProgramState programState = getCurrentProgram();
             printWriter.println(programState.toString() + "\n-------------");
             printWriter.flush();
         }
@@ -62,6 +40,17 @@ public class Repository implements IRepository
         {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public List<ProgramState> getProgramList()
+    {
+        return programStates;
+    }
+
+    @Override
+    public void setProgramList(List<ProgramState> programStates)
+    {
+        this.programStates = programStates;
     }
 }

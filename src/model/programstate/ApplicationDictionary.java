@@ -13,6 +13,11 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
         map = new HashMap<>(2);
     }
 
+    private ApplicationDictionary(Map<K, V> map)
+    {
+        this.map = new HashMap<>(map);
+    }
+
     @Override
     public V lookup(K key)
     {
@@ -35,6 +40,12 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
     public Map<K, V> getMap()
     {
         return map;
+    }
+
+    @Override
+    public IApplicationDictionary<K, V> deepCopy()
+    {
+        return new ApplicationDictionary<>(this.map);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class AssignStatement implements Statement
             throw new AssignTypeMismatchException(lookup, expressionValue);
 
         symbolTable.update(id, expressionValue);
-        return programState;
+        return null;
     }
 
     @Override

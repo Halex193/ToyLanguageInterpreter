@@ -2,13 +2,13 @@ package repository;
 
 import model.programstate.ProgramState;
 
+import java.util.List;
+
 public interface IRepository
 {
-    ProgramState getCurrentProgram();
+    List<ProgramState> getProgramList();
 
-    void setCurrentProgram(ProgramState programState);
+    void setProgramList(List<ProgramState> programStates);
 
-    ProgramState getProgramState(int number);
-
-    void logProgramState();
+    void logProgramState(ProgramState state);
 }

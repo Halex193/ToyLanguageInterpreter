@@ -53,7 +53,7 @@ public class CloseRFileStatement implements Statement
         {
             throw new FileIOException(String.format("File '%s' could not be closed", fileName));
         }
-        return programState;
+        return null;
     }
 
     @Override

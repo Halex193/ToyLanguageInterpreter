@@ -20,7 +20,7 @@ public class CompoundStatement implements Statement
         IApplicationStack<Statement> executionStack = programState.getExecutionStack();
         executionStack.push(secondStatement);
         executionStack.push(firstStatement);
-        return programState;
+        return null;
     }
 
     @Override

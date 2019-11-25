@@ -36,7 +36,7 @@ public class WhileStatement implements Statement
             executionStack.push(this);
             executionStack.push(statement);
         }
-        return programState;
+        return null;
     }
 
     @Override

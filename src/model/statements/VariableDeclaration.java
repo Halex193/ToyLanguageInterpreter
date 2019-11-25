@@ -27,7 +27,7 @@ public class VariableDeclaration implements Statement
             throw new VariableAlreadyDeclaredException(id);
 
         symbolTable.update(id, type.defaultValue());
-        return programState;
+        return null;
     }
 
     @Override

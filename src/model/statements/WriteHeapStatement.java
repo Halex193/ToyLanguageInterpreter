@@ -49,7 +49,7 @@ public class WriteHeapStatement implements Statement
             throw new ParameterTypeMismatchException(referenceValue.getReferencedType(), expressionValue);
         }
         heap.store(referenceValue.getAddress(), expressionValue);
-        return programState;
+        return null;
     }
 
     @Override

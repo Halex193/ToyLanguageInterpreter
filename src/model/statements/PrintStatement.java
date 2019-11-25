@@ -19,7 +19,7 @@ public class PrintStatement implements Statement
     {
         Value value = expression.evaluate(programState.getSymbolTable(), programState.getHeap());
         programState.getProgramOutput().add(value);
-        return programState;
+        return null;
     }
 
     @Override

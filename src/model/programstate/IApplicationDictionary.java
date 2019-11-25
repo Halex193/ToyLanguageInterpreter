@@ -12,4 +12,6 @@ public interface IApplicationDictionary<K, V>
     void remove(K key);
 
     Map<K, V> getMap();
+
+    IApplicationDictionary<K,V> deepCopy();
 }

@@ -54,7 +54,7 @@ public class OpenRFileStatement implements Statement
         {
             throw new FileIOException(String.format("File '%s' not found", fileName));
         }
-        return programState;
+        return null;
     }
 
     @Override

@@ -7,7 +7,7 @@ public class NOPStatement implements Statement
     @Override
     public ProgramState execute(ProgramState programState)
     {
-        return programState;
+        return null;
     }
 
     @Override
