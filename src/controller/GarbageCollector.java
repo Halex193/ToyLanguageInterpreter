@@ -3,13 +3,14 @@ package controller;
 import exceptions.MemoryDeallocatedException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
+import model.programstate.ProgramState;
 import model.types.ReferenceType;
 import model.values.ReferenceValue;
 import model.values.Value;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GarbageCollector
 {
@@ -17,16 +18,8 @@ public class GarbageCollector
     {
     }
 
-    public static void collectGarbage(IApplicationHeap<Value> heap, IApplicationDictionary<String, Value> symbolTable)
+    public static void collectGarbage(IApplicationHeap<Value> heap, Set<ReferenceValue> usedReferences)
     {
-        Set<ReferenceValue> usedReferences = symbolTable.
-                getMap().
-                values().
-                stream().
-                filter((value) -> value instanceof ReferenceValue).
-                map(ReferenceValue.class::cast)
-                .collect(Collectors.toSet());
-
         Set<ReferenceValue> transitiveReferences = new HashSet<>();
         usedReferences.forEach(reference ->
         {
@@ -66,5 +59,26 @@ public class GarbageCollector
         {
 
         }
+    }
+
+    public static void collectGarbage(List<ProgramState> programStates)
+    {
+        Optional<ProgramState> anyProgramState = programStates.stream().findAny();
+        if (anyProgramState.isEmpty())
+        {
+            return;
+        }
+
+        Set<ReferenceValue> usedReferences = programStates.stream().
+                map(ProgramState::getSymbolTable).
+                map(IApplicationDictionary::getMap).
+                map(Map::values).
+                map(Collection::stream).
+                reduce(Stream.empty(), Stream::concat).
+                filter((value) -> value instanceof ReferenceValue).
+                map(ReferenceValue.class::cast).
+                collect(Collectors.toSet());
+
+        collectGarbage(anyProgramState.get().getHeap(), usedReferences);
     }
 }

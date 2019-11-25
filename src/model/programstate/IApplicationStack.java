@@ -11,4 +11,6 @@ public interface IApplicationStack<T>
     int size();
 
     boolean isEmpty();
+
+    void invalidate();
 }

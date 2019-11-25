@@ -16,15 +16,8 @@ public class RunExampleCommand extends Command
     @Override
     public void execute()
     {
-        try
-        {
-            controller.allStep();
-            System.out.println("Program execution finished");
-        }
-        catch (ProgramException exception)
-        {
-            System.err.println("Program finished with error: \n" + exception);
-        }
+        controller.allStep();
+        System.out.println("Program execution finished");
     }
 }
 

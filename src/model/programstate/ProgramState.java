@@ -97,10 +97,18 @@ public class ProgramState
 
     public ProgramState oneStep() throws ProgramException
     {
-        if (this.isNotCompleted())
+        if (!this.isNotCompleted())
             throw new ProgramFinishedException();
         Statement currentStatement = executionStack.pop();
-        return currentStatement.execute(this);
+        try
+        {
+            return currentStatement.execute(this);
+        } catch (ProgramException exception)
+        {
+            executionStack.invalidate();
+            exception.setProgramStateId(id);
+            throw exception;
+        }
     }
 
     @Override

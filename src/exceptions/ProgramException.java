@@ -2,6 +2,8 @@ package exceptions;
 
 public class ProgramException extends Exception
 {
+    private int programStateId = -1;
+
     public ProgramException()
     {
     }
@@ -9,5 +11,15 @@ public class ProgramException extends Exception
     public ProgramException(String message)
     {
         super(message);
+    }
+
+    public void setProgramStateId(int programStateId)
+    {
+        this.programStateId = programStateId;
+    }
+
+    public int getProgramStateId()
+    {
+        return programStateId;
     }
 }

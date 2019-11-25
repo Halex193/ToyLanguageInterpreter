@@ -16,51 +16,80 @@ public class Controller
     private static final boolean LOG_PROGRAM_STATE = true;
 
     private IRepository repository;
-    private ExecutorService executor = Executors.newFixedThreadPool(2);
+    private ExecutorService executor;
 
     public Controller(IRepository repository)
     {
         this.repository = repository;
     }
 
-    public void oneStepForAllPrograms() throws ProgramException
+    public void oneStepForAllPrograms()
     {
         List<ProgramState> programList = repository.getProgramList();
-        if (LOG_PROGRAM_STATE)
-        {
-            programList.forEach(repository::logProgramState);
-        }
         List<Callable<ProgramState>> callables = programList.stream().
                 map(programState -> (Callable<ProgramState>) programState::oneStep).
                 collect(Collectors.toList());
         try
         {
-            List<ProgramState> newProgramStates = executor.invokeAll(callables).stream().map(programStateFuture ->
-            {
-                try
-                {
-                    return programStateFuture.get();
-                }
-                catch (InterruptedException | ExecutionException e)
-                {
-                    e.printStackTrace();
-                    return null;
-                }
-            }).filter(Objects::nonNull).collect(Collectors.toList());
+            List<ProgramState> newProgramStates = executor.invokeAll(callables).stream().
+                    map(programStateFuture ->
+                    {
+                        try
+                        {
+                            return programStateFuture.get();
+                        } catch (ExecutionException e)
+                        {
+                            if (e.getCause() instanceof ProgramException)
+                            {
+                                ProgramException exception = (ProgramException) e.getCause();
+                                repository.logException(exception);
+                            }
+                            return null;
+                        } catch (InterruptedException e)
+                        {
+                            return null;
+                        }
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
             programList.addAll(newProgramStates);
+            if (LOG_PROGRAM_STATE)
+            {
+                //programList.forEach(repository::logProgramState);
+                repository.logRepository();
+            }
             repository.setProgramList(programList);
-            //TODO check this
-        }
-        catch (InterruptedException e)
+        } catch (InterruptedException e)
         {
             e.printStackTrace();
         }
     }
 
-    public List<ProgramState> removeCompletedPrograms(List<ProgramState> programStates)
+    public void allStep()
     {
-        return programStates.stream().
-                filter(ProgramState::isNotCompleted).
-                collect(Collectors.toList());
+        executor = Executors.newFixedThreadPool(2);
+        removeCompletedPrograms();
+        List<ProgramState> programStates = repository.getProgramList();
+        if (LOG_PROGRAM_STATE)
+        {
+            //programStates.forEach(repository::logProgramState);
+            repository.logRepository();
+        }
+        while (programStates.size() > 0)
+        {
+            GarbageCollector.collectGarbage(programStates);
+            oneStepForAllPrograms();
+            removeCompletedPrograms();
+            programStates = repository.getProgramList();
+        }
+        executor.shutdownNow();
+    }
+
+    private void removeCompletedPrograms()
+    {
+        List<ProgramState> programList = repository.getProgramList();
+        repository.setProgramList(
+                programList.stream().
+                        filter(ProgramState::isNotCompleted).
+                        collect(Collectors.toList())
+        );
     }
 }

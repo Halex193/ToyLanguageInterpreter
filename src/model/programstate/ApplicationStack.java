@@ -47,6 +47,12 @@ public class ApplicationStack<T> implements IApplicationStack<T>
     }
 
     @Override
+    public void invalidate()
+    {
+        stack.clear();
+    }
+
+    @Override
     public String toString()
     {
         if (stack.isEmpty())
