@@ -6,15 +6,16 @@ import model.statements.Statement;
 import repository.IRepository;
 import repository.Repository;
 import utils.ProgramUtils;
-import view.commands.ExitCommand;
-import view.commands.RunExampleCommand;
+import view.cli.ExitCommand;
+import view.cli.RunExampleCommand;
+import view.cli.TextMenu;
 
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Interpreter
+public class CommandLineInterface
 {
     public static void main(String[] args)
     {

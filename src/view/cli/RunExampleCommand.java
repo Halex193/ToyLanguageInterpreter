@@ -1,7 +1,6 @@
-package view.commands;
+package view.cli;
 
 import controller.Controller;
-import exceptions.ProgramException;
 
 public class RunExampleCommand extends Command
 {
