@@ -1,6 +1,7 @@
 package model.programstate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -17,6 +18,12 @@ public class ApplicationList<T> implements IApplicationList<T>
     public void add(T value)
     {
         list.add(value);
+    }
+
+    @Override
+    public List<T> asList()
+    {
+        return new ArrayList<>(list);
     }
 
     @Override

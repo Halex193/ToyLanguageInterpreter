@@ -108,4 +108,22 @@ public class Controller
             System.err.println(String.format("Type checking failed: %s", e.getMessage()));
         }
     }
+
+    public void oneStep()
+    {
+        executor = Executors.newFixedThreadPool(2);
+        removeCompletedPrograms();
+        List<ProgramState> programStates = repository.getProgramList();
+        if (LOG_PROGRAM_STATE)
+        {
+            repository.logRepository();
+        }
+        if(!programStates.isEmpty())
+        {
+            GarbageCollector.collectGarbage(programStates);
+            oneStepForAllPrograms();
+            removeCompletedPrograms();
+        }
+        executor.shutdownNow();
+    }
 }

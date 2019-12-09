@@ -41,6 +41,6 @@ public class CompoundStatement implements Statement
     @Override
     public String toString()
     {
-        return firstStatement + ";" + secondStatement;
+        return firstStatement + "; " + secondStatement;
     }
 }

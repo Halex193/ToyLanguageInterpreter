@@ -1,17 +1,15 @@
 package repository;
 
-import java.io.*;
+import exceptions.ProgramException;
+import model.programstate.ProgramState;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import exceptions.ProgramException;
-import model.programstate.IApplicationDictionary;
-import model.programstate.IApplicationList;
-import model.programstate.IApplicationStack;
-import model.programstate.ProgramState;
-import model.statements.Statement;
-import model.values.Value;
 
 public class Repository implements IRepository
 {

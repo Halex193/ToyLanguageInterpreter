@@ -1,6 +1,9 @@
 package model.programstate;
 
 import exceptions.EmptyApplicationStackException;
+import model.statements.Statement;
+
+import java.util.List;
 
 public interface IApplicationStack<T>
 {
@@ -13,4 +16,6 @@ public interface IApplicationStack<T>
     boolean isEmpty();
 
     void invalidate();
+
+    List<T> asList();
 }

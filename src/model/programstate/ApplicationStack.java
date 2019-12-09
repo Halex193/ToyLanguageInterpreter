@@ -1,12 +1,6 @@
 package model.programstate;
 
-import java.util.Collections;
-import java.util.EmptyStackException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
-import java.util.StringJoiner;
+import java.util.*;
 
 import exceptions.EmptyApplicationStackException;
 import model.statements.Statement;
@@ -53,6 +47,14 @@ public class ApplicationStack<T> implements IApplicationStack<T>
     }
 
     @Override
+    public List<T> asList()
+    {
+        List<T> result = new LinkedList<>(stack);
+        Collections.reverse(result);
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         if (stack.isEmpty())
@@ -60,9 +62,7 @@ public class ApplicationStack<T> implements IApplicationStack<T>
             return "\u2205";
         }
         StringJoiner joiner = new StringJoiner("\n");
-        List<T> list = new LinkedList<>(stack);
-        Collections.reverse(list);
-        list.forEach((element) -> joiner.add(element.toString()));
+        asList().forEach((element) -> joiner.add(element.toString()));
         return joiner.toString();
     }
 }
