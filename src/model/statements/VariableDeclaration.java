@@ -1,6 +1,7 @@
 package model.statements;
 
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import exceptions.VariableAlreadyDeclaredException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.ProgramState;
@@ -34,6 +35,14 @@ public class VariableDeclaration implements Statement
     public Statement deepCopy()
     {
         return new VariableDeclaration(type.deepCopy(), id);
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        IApplicationDictionary<String, Type> newEnvironment = typeEnvironment.deepCopy();
+        newEnvironment.update(id, type);
+        return newEnvironment;
     }
 
     @Override

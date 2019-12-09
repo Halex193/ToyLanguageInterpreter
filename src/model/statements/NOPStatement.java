@@ -1,6 +1,9 @@
 package model.statements;
 
+import exceptions.TypeMismatchException;
+import model.programstate.IApplicationDictionary;
 import model.programstate.ProgramState;
+import model.types.Type;
 
 public class NOPStatement implements Statement
 {
@@ -14,6 +17,12 @@ public class NOPStatement implements Statement
     public Statement deepCopy()
     {
         return new NOPStatement();
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return typeEnvironment;
     }
 
     @Override

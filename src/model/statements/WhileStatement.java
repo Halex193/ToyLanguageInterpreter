@@ -2,10 +2,13 @@ package model.statements;
 
 import exceptions.ParameterTypeMismatchException;
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.expressions.Expression;
+import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationStack;
 import model.programstate.ProgramState;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -43,6 +46,12 @@ public class WhileStatement implements Statement
     public Statement deepCopy()
     {
         return new WhileStatement(condition.deepCopy(), statement.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return typeEnvironment;
     }
 
     @Override

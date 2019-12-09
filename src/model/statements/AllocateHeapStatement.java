@@ -2,12 +2,14 @@ package model.statements;
 
 import exceptions.AssignTypeMismatchException;
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import exceptions.VariableNotDeclaredException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
 import model.types.ReferenceType;
+import model.types.Type;
 import model.values.ReferenceValue;
 import model.values.Value;
 
@@ -48,6 +50,18 @@ public class AllocateHeapStatement implements Statement
     public Statement deepCopy()
     {
         return new AllocateHeapStatement(id, expression.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        Type variableType = typeEnvironment.lookup(id);
+        Type expressionType = expression.typeCheck(typeEnvironment);
+        if (!variableType.equals(new ReferenceType(expressionType)))
+        {
+            throw new TypeMismatchException(expression, variableType, expressionType);
+        }
+        return typeEnvironment;
     }
 
     @Override

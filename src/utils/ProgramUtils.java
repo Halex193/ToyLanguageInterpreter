@@ -8,6 +8,7 @@ import model.statements.*;
 import model.types.IntType;
 import model.types.ReferenceType;
 import model.types.StringType;
+import model.values.BoolValue;
 import model.values.IntValue;
 import model.values.StringValue;
 import model.values.Value;
@@ -20,7 +21,18 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8());
+        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9());
+    }
+
+    private static Statement program9()
+    {
+        return concatenate(
+                new VariableDeclaration(new IntType(), "a"),
+                new AssignStatement("a", new LogicExpression(
+                        new ValueExpression(new BoolValue(false)),
+                        new ValueExpression(new BoolValue(true)),
+                        "and"))
+        );
     }
 
     private static Statement program8()

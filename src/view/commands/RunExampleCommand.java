@@ -16,7 +16,7 @@ public class RunExampleCommand extends Command
     @Override
     public void execute()
     {
-        controller.allStep();
+        controller.execute();
         System.out.println("Program execution finished");
     }
 }

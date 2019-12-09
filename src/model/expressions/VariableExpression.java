@@ -1,8 +1,11 @@
 package model.expressions;
 
+import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import exceptions.VariableNotDeclaredException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
+import model.types.Type;
 import model.values.Value;
 
 public class VariableExpression implements Expression
@@ -27,6 +30,12 @@ public class VariableExpression implements Expression
     public Expression deepCopy()
     {
         return new VariableExpression(id);
+    }
+
+    @Override
+    public Type typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return typeEnvironment.lookup(id);
     }
 
     @Override

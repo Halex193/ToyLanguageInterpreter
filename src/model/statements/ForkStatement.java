@@ -1,7 +1,9 @@
 package model.statements;
 
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.programstate.*;
+import model.types.Type;
 import model.values.Value;
 
 import java.io.BufferedReader;
@@ -32,6 +34,12 @@ public class ForkStatement implements Statement
     public Statement deepCopy()
     {
         return new ForkStatement(statement.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return typeEnvironment;
     }
 
     @Override

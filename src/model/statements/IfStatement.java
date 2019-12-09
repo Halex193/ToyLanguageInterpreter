@@ -2,12 +2,14 @@ package model.statements;
 
 import exceptions.ConditionNotBoolean;
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.IApplicationStack;
 import model.programstate.ProgramState;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -54,6 +56,19 @@ public class IfStatement implements Statement
     public Statement deepCopy()
     {
         return new IfStatement(condition.deepCopy(), thenStatement.deepCopy(), elseStatement.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        Type conditionType = condition.typeCheck(typeEnvironment);
+        if (!conditionType.equals(new BoolType()))
+        {
+            throw new TypeMismatchException(condition, new BoolType(), conditionType);
+        }
+        thenStatement.typeCheck(typeEnvironment);
+        elseStatement.typeCheck(typeEnvironment);
+        return typeEnvironment;
     }
 
     @Override

@@ -3,11 +3,13 @@ package model.statements;
 import exceptions.FileIOException;
 import exceptions.ParameterTypeMismatchException;
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
 import model.types.StringType;
+import model.types.Type;
 import model.values.StringValue;
 import model.values.Value;
 
@@ -61,6 +63,12 @@ public class OpenRFileStatement implements Statement
     public Statement deepCopy()
     {
         return new OpenRFileStatement(fileNameExpression.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return typeEnvironment;
     }
 
     @Override

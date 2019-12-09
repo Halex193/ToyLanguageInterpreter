@@ -1,12 +1,10 @@
 package model.expressions;
 
-import exceptions.DivisionByZeroException;
-import exceptions.OperatorNotSupportedException;
-import exceptions.OperatorNotValidException;
-import exceptions.ProgramException;
+import exceptions.*;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.types.IntType;
+import model.types.Type;
 import model.values.IntValue;
 import model.values.Value;
 
@@ -64,6 +62,23 @@ public class ArithmeticExpression implements Expression
     public Expression deepCopy()
     {
         return new ArithmeticExpression(expression1.deepCopy(), expression2.deepCopy(), operator);
+    }
+
+    @Override
+    public Type typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        Type type1 = expression1.typeCheck(typeEnvironment);
+        Type type2 = expression2.typeCheck(typeEnvironment);
+
+        if (!type1.equals(new IntType()))
+        {
+            throw new TypeMismatchException(expression1, new IntType(), type1);
+        }
+        if (!type2.equals(new IntType()))
+        {
+            throw new TypeMismatchException(expression2, new IntType(), type2);
+        }
+        return new IntType();
     }
 
     public static String operatorToString(int operator)

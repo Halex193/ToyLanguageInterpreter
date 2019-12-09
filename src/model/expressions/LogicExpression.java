@@ -3,9 +3,11 @@ package model.expressions;
 import exceptions.OperatorNotSupportedException;
 import exceptions.OperatorNotValidException;
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -57,6 +59,23 @@ public class LogicExpression implements Expression
     public Expression deepCopy()
     {
         return new LogicExpression(expression1.deepCopy(), expression2.deepCopy(), operator);
+    }
+
+    @Override
+    public Type typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        Type type1 = expression1.typeCheck(typeEnvironment);
+        Type type2 = expression2.typeCheck(typeEnvironment);
+
+        if (!type1.equals(new BoolType()))
+        {
+            throw new TypeMismatchException(expression1, new BoolType(), type1);
+        }
+        if (!type2.equals(new BoolType()))
+        {
+            throw new TypeMismatchException(expression2, new BoolType(), type2);
+        }
+        return new BoolType();
     }
 
     public static String operatorToString(int operator)

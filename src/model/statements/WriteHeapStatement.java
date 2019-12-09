@@ -1,14 +1,12 @@
 package model.statements;
 
-import exceptions.ParameterTypeMismatchException;
-import exceptions.ProgramException;
-import exceptions.VariableNotDeclaredException;
-import exceptions.VariableNotReferenceException;
+import exceptions.*;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
 import model.types.ReferenceType;
+import model.types.Type;
 import model.values.ReferenceValue;
 import model.values.Value;
 
@@ -56,6 +54,12 @@ public class WriteHeapStatement implements Statement
     public Statement deepCopy()
     {
         return new WriteHeapStatement(id, expression.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return typeEnvironment;
     }
 
     @Override

@@ -2,6 +2,8 @@ package controller;
 
 import exceptions.ProgramException;
 import exceptions.ProgramFinishedException;
+import exceptions.TypeMismatchException;
+import model.programstate.ApplicationDictionary;
 import model.programstate.ProgramState;
 import model.statements.Statement;
 import repository.IRepository;
@@ -91,5 +93,19 @@ public class Controller
                         filter(ProgramState::isNotCompleted).
                         collect(Collectors.toList())
         );
+    }
+
+    public void execute()
+    {
+        Statement program = repository.getProgramList().get(0).getProgram();
+        try
+        {
+            program.typeCheck(new ApplicationDictionary<>());
+            allStep();
+        }
+        catch (TypeMismatchException e)
+        {
+            System.err.println(String.format("Type checking failed: %s", e.getMessage()));
+        }
     }
 }

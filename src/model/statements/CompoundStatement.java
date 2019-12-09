@@ -1,7 +1,10 @@
 package model.statements;
 
+import exceptions.TypeMismatchException;
+import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationStack;
 import model.programstate.ProgramState;
+import model.types.Type;
 
 public class CompoundStatement implements Statement
 {
@@ -27,6 +30,12 @@ public class CompoundStatement implements Statement
     public Statement deepCopy()
     {
         return new CompoundStatement(firstStatement.deepCopy(), secondStatement.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return secondStatement.typeCheck(firstStatement.typeCheck(typeEnvironment));
     }
 
     @Override

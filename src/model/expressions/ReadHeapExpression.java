@@ -2,9 +2,11 @@ package model.expressions;
 
 import exceptions.ParameterTypeMismatchException;
 import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.types.ReferenceType;
+import model.types.Type;
 import model.values.ReferenceValue;
 import model.values.Value;
 
@@ -33,6 +35,19 @@ public class ReadHeapExpression implements Expression
     public Expression deepCopy()
     {
         return new ReadHeapExpression(expression.deepCopy());
+    }
+
+    @Override
+    public Type typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        Type type = expression.typeCheck(typeEnvironment);
+
+        if (!(type instanceof ReferenceType))
+        {
+            throw new TypeMismatchException(expression, new ReferenceType(), type);
+        }
+        Type referencedType = ((ReferenceType) type).getReferencedType();
+        return new ReferenceType(referencedType);
     }
 
     @Override

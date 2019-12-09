@@ -2,11 +2,13 @@ package model.statements;
 
 import exceptions.ProgramException;
 import exceptions.AssignTypeMismatchException;
+import exceptions.TypeMismatchException;
 import exceptions.VariableNotDeclaredException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
+import model.types.Type;
 import model.values.Value;
 
 public class AssignStatement implements Statement
@@ -41,6 +43,18 @@ public class AssignStatement implements Statement
     public Statement deepCopy()
     {
         return new AssignStatement(id, expression.deepCopy());
+    }
+
+    @Override
+    public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        Type variableType = typeEnvironment.lookup(id);
+        Type expressionType = expression.typeCheck(typeEnvironment);
+        if (!variableType.equals(expressionType))
+        {
+            throw new TypeMismatchException(expression, variableType, expressionType);
+        }
+        return typeEnvironment;
     }
 
     @Override

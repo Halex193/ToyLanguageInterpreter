@@ -1,7 +1,10 @@
 package model.expressions;
 
+import exceptions.ProgramException;
+import exceptions.TypeMismatchException;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
+import model.types.Type;
 import model.values.Value;
 
 public class ValueExpression implements Expression
@@ -23,6 +26,12 @@ public class ValueExpression implements Expression
     public Expression deepCopy()
     {
         return new ValueExpression(value.deepCopy());
+    }
+
+    @Override
+    public Type typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
+    {
+        return value.getType();
     }
 
     @Override
