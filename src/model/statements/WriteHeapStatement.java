@@ -2,6 +2,7 @@ package model.statements;
 
 import exceptions.*;
 import model.expressions.Expression;
+import model.expressions.VariableExpression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
@@ -59,6 +60,17 @@ public class WriteHeapStatement implements Statement
     @Override
     public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
     {
+        Type variableType = typeEnvironment.lookup(id);
+        if (!(variableType instanceof ReferenceType))
+        {
+            throw new TypeMismatchException(new VariableExpression(id), new ReferenceType(), variableType);
+        }
+        Type expressionType = expression.typeCheck(typeEnvironment);
+        Type referencedType = ((ReferenceType) variableType).getReferencedType();
+        if (!expressionType.equals(referencedType))
+        {
+            throw new TypeMismatchException(expression, referencedType, expressionType);
+        }
         return typeEnvironment;
     }
 

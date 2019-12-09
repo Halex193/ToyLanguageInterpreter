@@ -40,7 +40,7 @@ public class VariableDeclaration implements Statement
     @Override
     public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
     {
-        IApplicationDictionary<String, Type> newEnvironment = typeEnvironment.deepCopy();
+        IApplicationDictionary<String, Type> newEnvironment = typeEnvironment.shallowCopy();
         newEnvironment.update(id, type);
         return newEnvironment;
     }

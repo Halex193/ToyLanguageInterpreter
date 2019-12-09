@@ -66,8 +66,8 @@ public class IfStatement implements Statement
         {
             throw new TypeMismatchException(condition, new BoolType(), conditionType);
         }
-        thenStatement.typeCheck(typeEnvironment);
-        elseStatement.typeCheck(typeEnvironment);
+        thenStatement.typeCheck(typeEnvironment.shallowCopy());
+        elseStatement.typeCheck(typeEnvironment.shallowCopy());
         return typeEnvironment;
     }
 

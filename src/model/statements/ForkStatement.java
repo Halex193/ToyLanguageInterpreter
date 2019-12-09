@@ -22,7 +22,7 @@ public class ForkStatement implements Statement
     public ProgramState execute(ProgramState programState) throws ProgramException
     {
         IApplicationStack<Statement> executionStack = new ApplicationStack<>();
-        IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable().deepCopy();
+        IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable().shallowCopy();
         IApplicationList<Value> programOutput = programState.getProgramOutput();
         IApplicationDictionary<String, BufferedReader> fileTable = programState.getFileTable();
         IApplicationHeap<Value> heap = programState.getHeap();
@@ -39,6 +39,7 @@ public class ForkStatement implements Statement
     @Override
     public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
     {
+        statement.typeCheck(typeEnvironment.shallowCopy());
         return typeEnvironment;
     }
 

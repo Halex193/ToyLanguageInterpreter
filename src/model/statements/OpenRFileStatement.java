@@ -68,6 +68,11 @@ public class OpenRFileStatement implements Statement
     @Override
     public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
     {
+        Type expressionType = fileNameExpression.typeCheck(typeEnvironment);
+        if (!expressionType.equals(new StringType()))
+        {
+            throw new TypeMismatchException(fileNameExpression, new StringType(), expressionType);
+        }
         return typeEnvironment;
     }
 

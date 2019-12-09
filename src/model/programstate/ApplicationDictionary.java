@@ -43,7 +43,7 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
     }
 
     @Override
-    public IApplicationDictionary<K, V> deepCopy()
+    public IApplicationDictionary<K, V> shallowCopy()
     {
         return new ApplicationDictionary<>(this.map);
     }

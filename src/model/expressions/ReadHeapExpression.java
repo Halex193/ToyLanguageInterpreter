@@ -46,8 +46,7 @@ public class ReadHeapExpression implements Expression
         {
             throw new TypeMismatchException(expression, new ReferenceType(), type);
         }
-        Type referencedType = ((ReferenceType) type).getReferencedType();
-        return new ReferenceType(referencedType);
+        return ((ReferenceType) type).getReferencedType();
     }
 
     @Override

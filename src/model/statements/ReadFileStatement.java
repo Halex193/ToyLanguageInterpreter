@@ -2,6 +2,7 @@ package model.statements;
 
 import exceptions.*;
 import model.expressions.Expression;
+import model.expressions.VariableExpression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.IApplicationHeap;
 import model.programstate.ProgramState;
@@ -80,6 +81,16 @@ public class ReadFileStatement implements Statement
     @Override
     public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
     {
+        Type expressionType = fileNameExpression.typeCheck(typeEnvironment);
+        if (!expressionType.equals(new StringType()))
+        {
+            throw new TypeMismatchException(fileNameExpression, new StringType(), expressionType);
+        }
+        Type variableType = typeEnvironment.lookup(id);
+        if (!variableType.equals(new IntType()))
+        {
+            throw new TypeMismatchException(new VariableExpression(id), new IntType(), variableType);
+        }
         return typeEnvironment;
     }
 

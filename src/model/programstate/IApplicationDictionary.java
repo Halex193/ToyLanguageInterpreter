@@ -13,5 +13,5 @@ public interface IApplicationDictionary<K, V>
 
     Map<K, V> getMap();
 
-    IApplicationDictionary<K,V> deepCopy();
+    IApplicationDictionary<K,V> shallowCopy();
 }
