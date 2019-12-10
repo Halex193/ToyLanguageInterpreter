@@ -1,7 +1,6 @@
 package controller;
 
 import exceptions.ProgramException;
-import exceptions.ProgramFinishedException;
 import exceptions.TypeMismatchException;
 import model.programstate.ApplicationDictionary;
 import model.programstate.ProgramState;
@@ -10,7 +9,11 @@ import repository.IRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Controller
@@ -65,8 +68,9 @@ public class Controller
         }
     }
 
-    public void allStep()
+    public ProgramState allStep()
     {
+        ProgramState state = null;
         executor = Executors.newFixedThreadPool(2);
         removeCompletedPrograms();
         List<ProgramState> programStates = repository.getProgramList();
@@ -79,10 +83,12 @@ public class Controller
         {
             GarbageCollector.collectGarbage(programStates);
             oneStepForAllPrograms();
+            state = repository.getProgramList().get(0);
             removeCompletedPrograms();
             programStates = repository.getProgramList();
         }
         executor.shutdownNow();
+        return state;
     }
 
     private void removeCompletedPrograms()
@@ -109,8 +115,9 @@ public class Controller
         }
     }
 
-    public void oneStep()
+    public ProgramState oneStep()
     {
+        ProgramState state = null;
         executor = Executors.newFixedThreadPool(2);
         removeCompletedPrograms();
         List<ProgramState> programStates = repository.getProgramList();
@@ -122,8 +129,10 @@ public class Controller
         {
             GarbageCollector.collectGarbage(programStates);
             oneStepForAllPrograms();
+            state = repository.getProgramList().get(0);
             removeCompletedPrograms();
         }
         executor.shutdownNow();
+        return state;
     }
 }

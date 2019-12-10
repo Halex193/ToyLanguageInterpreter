@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static utils.ProgramUtils.cleanLogDirectory;
+
 public class CommandLineInterface
 {
     public static void main(String[] args)
@@ -39,16 +41,6 @@ public class CommandLineInterface
             menu.addCommand(command);
         }
         menu.show();
-    }
-
-    private static void cleanLogDirectory()
-    {
-        File[] logFiles = new File("logs").listFiles();
-        if(logFiles == null) return;
-        for (File logFile : logFiles)
-        {
-            boolean deleted = logFile.delete();
-        }
     }
 }
 

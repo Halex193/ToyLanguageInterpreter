@@ -13,8 +13,8 @@ import java.io.IOException;
 
 public class GraphicalInterface extends Application
 {
-    Stage stage;
-    public Parent menuRoot;
+    private Stage stage;
+    private Parent menuRoot;
 
     @Override
     public void start(Stage primaryStage) throws Exception

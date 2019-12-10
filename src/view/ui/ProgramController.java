@@ -1,52 +1,52 @@
 package view.ui;
 
 import controller.Controller;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import model.programstate.ProgramState;
 import model.statements.Statement;
-import model.values.IntValue;
 import model.values.Value;
 import repository.IRepository;
 import repository.Repository;
-import view.GraphicalInterface;
+import utils.ProgramUtils;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class ProgramController
 {
     public final String logFilePath = "logs/program.log";
-    @FXML private Label programStateNumber;
+    @FXML
+    private Label programStateNumber;
 
-    @FXML private ListView<Integer> programStateList;
+    @FXML
+    private ListView<Integer> programStateList;
 
-    @FXML private ListView<Statement> executionStack;
+    @FXML
+    private ListView<Statement> executionStack;
 
-    @FXML private ListView<Value> outputList;
+    @FXML
+    private ListView<Value> outputList;
 
-    @FXML private TableView<Map.Entry<String, Value>> symbolTable;
+    @FXML
+    private TableView<Map.Entry<String, Value>> symbolTable;
 
-    @FXML private TableView<Map.Entry<Integer, Value>> heapTable;
+    @FXML
+    private TableView<Map.Entry<Integer, Value>> heapTable;
 
-    @FXML private ListView<String> fileList;
+    @FXML
+    private ListView<String> fileList;
 
 
     private Controller controller;
@@ -55,15 +55,15 @@ public class ProgramController
     @FXML
     void allSteps(ActionEvent event)
     {
-        controller.allStep();
-        populate();
+        ProgramState lastState = controller.allStep();
+        populate(lastState);
     }
 
     @FXML
     void oneStep(ActionEvent event)
     {
-        controller.oneStep();
-        populate();
+        ProgramState lastState = controller.oneStep();
+        populate(lastState);
     }
 
     @FXML
@@ -71,8 +71,11 @@ public class ProgramController
     {
         try
         {
-            Desktop.getDesktop().open(new File(logFilePath));
-        } catch (IOException e)
+            File file = new File(logFilePath);
+            if (!file.exists()) return;
+            Desktop.getDesktop().open(file);
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -80,15 +83,16 @@ public class ProgramController
 
     public void initialize(Statement statement)
     {
+        ProgramUtils.cleanLogDirectory();
         repository = new Repository(new ProgramState(statement), logFilePath);
         controller = new Controller(repository);
         initializeProgramStateList();
         initializeSymbolTable();
         initializeHeapTable();
-        populate();
+        populate(repository.getProgramList().get(0));
     }
 
-    private void populate()
+    private void populate(ProgramState lastState)
     {
         List<ProgramState> programList = repository.getProgramList();
         setProgramStateCount(programList.size());
@@ -99,6 +103,10 @@ public class ProgramController
             programStateList.getItems().setAll();
             executionStack.getItems().setAll();
             symbolTable.getItems().setAll(new ArrayList<>(0));
+            if (lastState != null)
+            {
+                populateNonVolatile(lastState);
+            }
             return;
         }
         programStateList.getSelectionModel().select(0);
@@ -139,8 +147,9 @@ public class ProgramController
 
     private void populateVolatile(ObservableValue<? extends Integer> observable, Integer oldId, Integer newId)
     {
+        if (newId == null) return;
         Optional<ProgramState> anyState = repository.getProgramList().stream().filter((state) -> state.getId() == newId).findAny();
-        if(anyState.isEmpty()) return;
+        if (anyState.isEmpty()) return;
 
         ProgramState programState = anyState.get();
         symbolTable.getItems().setAll(programState.getSymbolTable().getMap().entrySet());

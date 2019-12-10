@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +18,16 @@ public class ProgramUtils
 {
     private ProgramUtils()
     {
+    }
+
+    public static void cleanLogDirectory()
+    {
+        File[] logFiles = new File("logs").listFiles();
+        if(logFiles == null) return;
+        for (File logFile : logFiles)
+        {
+            boolean deleted = logFile.delete();
+        }
     }
 
     public static List<Statement> generatePrograms()
