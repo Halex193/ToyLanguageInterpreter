@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.programstate.ApplicationDictionary;
 import model.statements.Statement;
@@ -23,6 +24,7 @@ public class GraphicalInterface extends Application
     public void start(Stage primaryStage) throws Exception
     {
         stage = primaryStage;
+        stage.getIcons().add(new Image(GraphicalInterface.class.getResourceAsStream("/icon.png")));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/menu.fxml"));
         menuRoot = loader.load();
         MenuController mainController = loader.getController();
