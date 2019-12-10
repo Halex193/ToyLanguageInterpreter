@@ -7,9 +7,7 @@ import model.programstate.ProgramState;
 import model.statements.Statement;
 import repository.IRepository;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -28,12 +26,13 @@ public class Controller
         this.repository = repository;
     }
 
-    public void oneStepForAllPrograms()
+    public Set<ProgramException> oneStepForAllPrograms()
     {
         List<ProgramState> programList = repository.getProgramList();
         List<Callable<ProgramState>> callables = programList.stream().
                 map(programState -> (Callable<ProgramState>) programState::oneStep).
                 collect(Collectors.toList());
+        Set<ProgramException> exceptions = new HashSet<>();
         try
         {
             List<ProgramState> newProgramStates = executor.invokeAll(callables).stream().
@@ -47,6 +46,7 @@ public class Controller
                             if (e.getCause() instanceof ProgramException)
                             {
                                 ProgramException exception = (ProgramException) e.getCause();
+                                exceptions.add(exception);
                                 repository.logException(exception);
                             }
                             return null;
@@ -66,11 +66,11 @@ public class Controller
         {
             e.printStackTrace();
         }
+        return exceptions;
     }
 
-    public ProgramState allStep()
+    public ExecutionInformation allStep()
     {
-        ProgramState state = null;
         executor = Executors.newFixedThreadPool(2);
         removeCompletedPrograms();
         List<ProgramState> programStates = repository.getProgramList();
@@ -79,16 +79,19 @@ public class Controller
             //programStates.forEach(repository::logProgramState);
             repository.logRepository();
         }
+
+        ProgramState state = null;
+        Set<ProgramException> exceptions = null;
         while (programStates.size() > 0)
         {
             GarbageCollector.collectGarbage(programStates);
-            oneStepForAllPrograms();
+            exceptions = oneStepForAllPrograms();
             state = repository.getProgramList().get(0);
             removeCompletedPrograms();
             programStates = repository.getProgramList();
         }
         executor.shutdownNow();
-        return state;
+        return new ExecutionInformation(state, exceptions);
     }
 
     private void removeCompletedPrograms()
@@ -115,24 +118,43 @@ public class Controller
         }
     }
 
-    public ProgramState oneStep()
+    public ExecutionInformation oneStep()
     {
-        ProgramState state = null;
         executor = Executors.newFixedThreadPool(2);
         removeCompletedPrograms();
         List<ProgramState> programStates = repository.getProgramList();
-        if (LOG_PROGRAM_STATE)
-        {
-            repository.logRepository();
-        }
+        ProgramState state = null;
+        Set<ProgramException> exceptions = null;
         if(!programStates.isEmpty())
         {
             GarbageCollector.collectGarbage(programStates);
-            oneStepForAllPrograms();
+            exceptions = oneStepForAllPrograms();
             state = repository.getProgramList().get(0);
             removeCompletedPrograms();
         }
         executor.shutdownNow();
-        return state;
+        return new ExecutionInformation(state, exceptions);
+    }
+
+    public static class ExecutionInformation
+    {
+        private ProgramState lastState;
+        private Set<ProgramException> exceptions;
+
+        public ExecutionInformation(ProgramState lastState, Set<ProgramException> exceptions)
+        {
+            this.lastState = lastState;
+            this.exceptions = exceptions;
+        }
+
+        public ProgramState getLastState()
+        {
+            return lastState;
+        }
+
+        public Set<ProgramException> getExceptions()
+        {
+            return exceptions;
+        }
     }
 }

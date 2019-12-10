@@ -11,7 +11,7 @@
          <opaqueInsets>
             <Insets />
          </opaqueInsets></ListView>
-      <Button fx:id="runButton" mnemonicParsing="false" onAction="#onRunButtonClicked" text="Run">
+      <Button fx:id="runButton" mnemonicParsing="false" onAction="#onRunButtonClicked" prefHeight="25.0" prefWidth="160.0" text="Run">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>

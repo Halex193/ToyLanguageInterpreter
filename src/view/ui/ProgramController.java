@@ -1,21 +1,21 @@
 package view.ui;
 
 import controller.Controller;
+import exceptions.ProgramException;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import model.programstate.ProgramState;
 import model.statements.Statement;
 import model.values.Value;
 import repository.IRepository;
 import repository.Repository;
 import utils.ProgramUtils;
+import view.GraphicalInterface;
 
 import java.awt.*;
 import java.io.File;
@@ -51,19 +51,36 @@ public class ProgramController
 
     private Controller controller;
     public IRepository repository;
+    private GraphicalInterface graphicalInterface;
 
     @FXML
     void allSteps(ActionEvent event)
     {
-        ProgramState lastState = controller.allStep();
-        populate(lastState);
+        Controller.ExecutionInformation information = controller.allStep();
+        alertExceptions(information.getExceptions());
+        populate(information.getLastState());
+    }
+
+    private void alertExceptions(Set<ProgramException> exceptions)
+    {
+        if(exceptions == null) return;
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Thread execution halted!");
+        exceptions.forEach(exception ->
+        {
+            alert.setContentText(String.format("Thread with id %d finished with exception: %s", exception.getProgramStateId(), exception.toString()));
+            alert.showAndWait();
+        });
+
     }
 
     @FXML
     void oneStep(ActionEvent event)
     {
-        ProgramState lastState = controller.oneStep();
-        populate(lastState);
+        Controller.ExecutionInformation information = controller.oneStep();
+        alertExceptions(information.getExceptions());
+        populate(information.getLastState());
     }
 
     @FXML
@@ -79,6 +96,12 @@ public class ProgramController
         {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void back(ActionEvent event)
+    {
+        graphicalInterface.goToMenu();
     }
 
     public void initialize(Statement statement)
@@ -163,4 +186,8 @@ public class ProgramController
         outputList.getItems().setAll(programState.getProgramOutput().asList());
     }
 
+    public void setApplication(GraphicalInterface graphicalInterface)
+    {
+        this.graphicalInterface = graphicalInterface;
+    }
 }
