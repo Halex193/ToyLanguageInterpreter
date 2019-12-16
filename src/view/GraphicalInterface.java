@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import model.programstate.ApplicationDictionary;
 import model.statements.Statement;
@@ -64,6 +65,7 @@ public class GraphicalInterface extends Application
             alert.setTitle("Error");
             alert.setHeaderText("Type checking failed!");
             alert.setContentText(e.getMessage());
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
             alert.showAndWait();
         }

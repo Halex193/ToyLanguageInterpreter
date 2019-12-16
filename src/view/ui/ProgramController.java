@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import model.programstate.ProgramState;
 import model.statements.Statement;
 import model.values.Value;
@@ -72,6 +73,7 @@ public class ProgramController
             alert.setContentText(String.format("Thread with id %d finished with exception: %s", exception.getProgramStateId(), exception.toString()));
             alert.showAndWait();
         });
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
     }
 
