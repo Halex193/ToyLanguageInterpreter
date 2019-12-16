@@ -3,6 +3,7 @@ package model.programstate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
 {
@@ -10,7 +11,7 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
 
     public ApplicationDictionary()
     {
-        map = new HashMap<>(2);
+        map = new ConcurrentHashMap<>(2);
     }
 
     private ApplicationDictionary(Map<K, V> map)

@@ -1,9 +1,6 @@
 package model.programstate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class ApplicationList<T> implements IApplicationList<T>
 {
@@ -11,7 +8,7 @@ public class ApplicationList<T> implements IApplicationList<T>
 
     public ApplicationList()
     {
-        list = new ArrayList<>();
+        list = new Vector<>();
     }
 
     @Override

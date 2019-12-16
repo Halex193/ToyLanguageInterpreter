@@ -6,11 +6,13 @@ import model.values.Value;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ApplicationHeap<T> implements IApplicationHeap<T>
 {
-    private int addressSeed = 1;
-    private Map<Integer, T> memoryMap = new HashMap<>();
+    private AtomicInteger addressSeed = new AtomicInteger(1);
+    private Map<Integer, T> memoryMap = new ConcurrentHashMap<>();
 
     @Override
     public T read(int address) throws MemoryDeallocatedException
@@ -26,8 +28,9 @@ public class ApplicationHeap<T> implements IApplicationHeap<T>
     @Override
     public int store(T value)
     {
-        memoryMap.put(addressSeed, value);
-        return addressSeed++;
+        int newAddress = addressSeed.getAndIncrement();
+        memoryMap.put(newAddress, value);
+        return newAddress;
     }
 
     @Override
