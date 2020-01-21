@@ -32,8 +32,31 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9());
+        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9(), program10());
     }
+
+    private static Statement program10()
+    {
+        return concatenate(
+                new VariableDeclaration(new IntType(), "v"),
+                new VariableDeclaration(new IntType(), "x"),
+                new VariableDeclaration(new IntType(), "y"),
+                new AssignStatement("v", new ValueExpression(new IntValue(0))),
+                new RepeatStatement(concatenate(
+                        new ForkStatement(concatenate(
+                                new PrintStatement(new VariableExpression("v")),
+                                new AssignStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), "-"))
+                        )),
+                        new AssignStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), "+"))
+                ), new RelationalExpression(new VariableExpression("v"), new ValueExpression(new IntValue(3)), "==")),
+                new AssignStatement("x", new ValueExpression(new IntValue(1))),
+                new NOPStatement(),
+                new AssignStatement("y", new ValueExpression(new IntValue(3))),
+                new NOPStatement(),
+                new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*"))
+        );
+    }
+
 
     private static Statement program9()
     {
