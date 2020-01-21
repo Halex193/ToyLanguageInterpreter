@@ -2,10 +2,12 @@ package model.programstate;
 
 import exceptions.ProgramException;
 import exceptions.ProgramFinishedException;
+import javafx.util.Pair;
 import model.statements.Statement;
 import model.values.Value;
 
 import java.io.BufferedReader;
+import java.util.List;
 
 public class ProgramState
 {
@@ -14,10 +16,10 @@ public class ProgramState
     private IApplicationList<Value> programOutput;
     private IApplicationDictionary<String, BufferedReader> fileTable;
     private IApplicationHeap<Value> heap;
+    private IApplicationIndex<Pair<Integer, List<Integer>>> barrierTable;
     private Statement program;
     private int id;
     private static int idSeed = 1;
-
     public ProgramState(Statement program)
     {
         this.id = generateId();
@@ -26,6 +28,7 @@ public class ProgramState
         this.programOutput = new ApplicationList<>();
         this.fileTable = new ApplicationDictionary<>();
         this.heap = new ApplicationHeap<>();
+        this.barrierTable = new ApplicationIndex<>();
         this.program = program.deepCopy();
         this.executionStack.push(program);
 
@@ -37,6 +40,7 @@ public class ProgramState
             IApplicationList<Value> programOutput,
             IApplicationDictionary<String, BufferedReader> fileTable,
             IApplicationHeap<Value> heap,
+            IApplicationIndex<Pair<Integer, List<Integer>>> barrierTable,
             Statement program
     )
     {
@@ -47,6 +51,7 @@ public class ProgramState
         this.fileTable = fileTable;
         this.heap = heap;
         this.program = program.deepCopy();
+        this.barrierTable = barrierTable;
         this.executionStack.push(program);
     }
 
@@ -78,6 +83,11 @@ public class ProgramState
     public IApplicationHeap<Value> getHeap()
     {
         return heap;
+    }
+
+    public IApplicationIndex<Pair<Integer, List<Integer>>> getBarrierTable()
+    {
+        return barrierTable;
     }
 
     public Statement getProgram()
@@ -115,13 +125,14 @@ public class ProgramState
     public String toString()
     {
         return String.format(
-                "Program State ID: %d\nExecution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s",
+                "Program State ID: %d\nExecution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s\nBarrier Table:\n%s",
                 id,
                 executionStack.toString(),
                 symbolTable.toString(),
                 programOutput.toString(),
                 fileTable.toString(),
-                heap.toString()
+                heap.toString(),
+                barrierTable.toString()
         );
     }
 }

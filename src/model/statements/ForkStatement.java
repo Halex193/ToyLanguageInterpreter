@@ -2,11 +2,13 @@ package model.statements;
 
 import exceptions.ProgramException;
 import exceptions.TypeMismatchException;
+import javafx.util.Pair;
 import model.programstate.*;
 import model.types.Type;
 import model.values.Value;
 
 import java.io.BufferedReader;
+import java.util.List;
 
 public class ForkStatement implements Statement
 {
@@ -26,8 +28,9 @@ public class ForkStatement implements Statement
         IApplicationList<Value> programOutput = programState.getProgramOutput();
         IApplicationDictionary<String, BufferedReader> fileTable = programState.getFileTable();
         IApplicationHeap<Value> heap = programState.getHeap();
+        IApplicationIndex<Pair<Integer, List<Integer>>> barrierTable = programState.getBarrierTable();
 
-        return new ProgramState(executionStack, symbolTable, programOutput, fileTable, heap, statement);
+        return new ProgramState(executionStack, symbolTable, programOutput, fileTable, heap, barrierTable, statement);
     }
 
     @Override
