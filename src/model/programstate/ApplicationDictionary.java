@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
 {
-    private Map<K, V> map;
+    protected Map<K, V> map;
 
     public ApplicationDictionary()
     {
@@ -16,7 +16,7 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
 
     private ApplicationDictionary(Map<K, V> map)
     {
-        this.map = new HashMap<>(map);
+        this.map = new ConcurrentHashMap<>(map);
     }
 
     @Override
