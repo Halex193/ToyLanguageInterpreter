@@ -51,6 +51,11 @@ public class WhileStatement implements Statement
     @Override
     public IApplicationDictionary<String, Type> typeCheck(IApplicationDictionary<String, Type> typeEnvironment) throws TypeMismatchException
     {
+        Type type = condition.typeCheck(typeEnvironment);
+        if (!type.equals(new BoolType()))
+        {
+            throw new TypeMismatchException(condition, new BoolType(), type);
+        }
         statement.typeCheck(typeEnvironment.shallowCopy());
         return typeEnvironment;
     }
