@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ProgramController
@@ -48,6 +49,12 @@ public class ProgramController
 
     @FXML
     private ListView<String> fileList;
+
+    @FXML
+    private ListView<DTO> bonusList;
+
+    @FXML
+    private TableView<DTO> bonusTable;
 
 
     private Controller controller;
@@ -114,6 +121,7 @@ public class ProgramController
         initializeProgramStateList();
         initializeSymbolTable();
         initializeHeapTable();
+        initializeBonusTable();
         populate(repository.getProgramList().get(0));
     }
 
@@ -159,6 +167,27 @@ public class ProgramController
         symbolTable.getColumns().add(valueColumn);
     }
 
+    static class DTO
+    {
+        //TODO
+        int key;
+        String value;
+    }
+
+    private void initializeBonusTable()
+    {
+        //TODO
+        addColumn("Key", bonusTable, dto -> dto.key);
+        addColumn("Value", bonusTable, dto -> dto.value);
+    }
+
+    private <DT, T> void addColumn(String name, TableView<DT> tableView, Function<DT, T> function)
+    {
+        TableColumn<DT, T> column = new TableColumn<>(name);
+        column.setCellValueFactory(tableData -> new SimpleObjectProperty<>(function.apply(tableData.getValue())));
+        tableView.getColumns().add(column);
+    }
+
     private void initializeHeapTable()
     {
         TableColumn<Map.Entry<Integer, Value>, Integer> addressColumn = new TableColumn<>("Address");
@@ -186,6 +215,10 @@ public class ProgramController
         heapTable.getItems().setAll(programState.getHeap().getMap().entrySet());
         fileList.getItems().setAll(programState.getFileTable().getMap().keySet());
         outputList.getItems().setAll(programState.getProgramOutput().asList());
+        //TODO
+//        List<DTO> dtos = .stream.map(new DTO()).collect(Collectors.toList());
+//        bonusList.getItems().setAll(dtos);
+//        bonusTable.getItems().setAll(dtos);
     }
 
     public void setApplication(GraphicalInterface graphicalInterface)

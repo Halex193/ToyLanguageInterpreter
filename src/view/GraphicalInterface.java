@@ -32,7 +32,7 @@ public class GraphicalInterface extends Application
         mainController.setApplication(this);
 
         primaryStage.setTitle("Toy Language Interpreter");
-        primaryStage.setScene(new Scene(menuRoot, 800, 400));
+        primaryStage.setScene(new Scene(menuRoot, 800, 600));
         primaryStage.show();
     }
 
