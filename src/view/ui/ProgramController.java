@@ -2,6 +2,7 @@ package view.ui;
 
 import controller.Controller;
 import exceptions.ProgramException;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -42,6 +43,8 @@ public class ProgramController
 
     @FXML
     private TableView<Map.Entry<String, Value>> symbolTable;
+    @FXML
+    private TableView<DTO> bonusTable;
 
     @FXML
     private TableView<Map.Entry<Integer, Value>> heapTable;
@@ -114,6 +117,7 @@ public class ProgramController
         initializeProgramStateList();
         initializeSymbolTable();
         initializeHeapTable();
+        initializeBarrierTable();
         populate(repository.getProgramList().get(0));
     }
 
@@ -159,6 +163,21 @@ public class ProgramController
         symbolTable.getColumns().add(valueColumn);
     }
 
+    private void initializeBarrierTable()
+    {
+        TableColumn<DTO, Integer> indexColumn = new TableColumn<>("Index");
+        indexColumn.setCellValueFactory(tableData -> new SimpleObjectProperty<>(tableData.getValue().getIndex()));
+        bonusTable.getColumns().add(indexColumn);
+
+        TableColumn<DTO, Integer> valueColumn = new TableColumn<>("Value");
+        valueColumn.setCellValueFactory(tableData -> new SimpleObjectProperty<>(tableData.getValue().getValue()));
+        bonusTable.getColumns().add(valueColumn);
+
+        TableColumn<DTO, List<Integer>> listColumn = new TableColumn<>("List");
+        listColumn.setCellValueFactory(tableData -> new SimpleObjectProperty<>(tableData.getValue().getIds()));
+        bonusTable.getColumns().add(listColumn);
+    }
+
     private void initializeHeapTable()
     {
         TableColumn<Map.Entry<Integer, Value>, Integer> addressColumn = new TableColumn<>("Address");
@@ -186,6 +205,8 @@ public class ProgramController
         heapTable.getItems().setAll(programState.getHeap().getMap().entrySet());
         fileList.getItems().setAll(programState.getFileTable().getMap().keySet());
         outputList.getItems().setAll(programState.getProgramOutput().asList());
+        List<DTO> dtos = programState.getBarrierTable().getMap().entrySet().stream().map((e) -> new DTO(e.getKey(), e.getValue().getKey(), e.getValue().getValue())).collect(Collectors.toList());
+        bonusTable.getItems().setAll(dtos);
     }
 
     public void setApplication(GraphicalInterface graphicalInterface)
