@@ -172,6 +172,8 @@ public class ProgramController
         //TODO
         int key;
         String value;
+
+        //TODO
     }
 
     private void initializeBonusTable()
@@ -216,9 +218,9 @@ public class ProgramController
         fileList.getItems().setAll(programState.getFileTable().getMap().keySet());
         outputList.getItems().setAll(programState.getProgramOutput().asList());
         //TODO
-//        List<DTO> dtos = .stream.map(new DTO()).collect(Collectors.toList());
-//        bonusList.getItems().setAll(dtos);
-//        bonusTable.getItems().setAll(dtos);
+       // List<DTO> dtos = .stream().map(e -> new DTO()).collect(Collectors.toList());
+       // bonusList.getItems().setAll(dtos);
+       // bonusTable.getItems().setAll(dtos);
     }
 
     public void setApplication(GraphicalInterface graphicalInterface)

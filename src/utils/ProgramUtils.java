@@ -32,7 +32,21 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9());
+        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9(), program10(), program11());
+    }
+
+    private static Statement program10()
+    {
+        return concatenate(
+                new NOPStatement()
+        );
+    }
+
+    private static Statement program11()
+    {
+        return concatenate(
+                new NOPStatement()
+        );
     }
 
     private static Statement program9()
