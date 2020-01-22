@@ -2,7 +2,6 @@ package view.ui;
 
 import controller.Controller;
 import exceptions.ProgramException;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -24,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ProgramController
@@ -43,14 +43,18 @@ public class ProgramController
 
     @FXML
     private TableView<Map.Entry<String, Value>> symbolTable;
-    @FXML
-    private TableView<DTO> bonusTable;
 
     @FXML
     private TableView<Map.Entry<Integer, Value>> heapTable;
 
     @FXML
     private ListView<String> fileList;
+
+    @FXML
+    private ListView<DTO> bonusList;
+
+    @FXML
+    private TableView<DTO> bonusTable;
 
 
     private Controller controller;
@@ -117,7 +121,7 @@ public class ProgramController
         initializeProgramStateList();
         initializeSymbolTable();
         initializeHeapTable();
-        initializeBarrierTable();
+        initializeBonusTable();
         populate(repository.getProgramList().get(0));
     }
 
@@ -163,19 +167,25 @@ public class ProgramController
         symbolTable.getColumns().add(valueColumn);
     }
 
-    private void initializeBarrierTable()
+    static class DTO
     {
-        TableColumn<DTO, Integer> indexColumn = new TableColumn<>("Index");
-        indexColumn.setCellValueFactory(tableData -> new SimpleObjectProperty<>(tableData.getValue().getIndex()));
-        bonusTable.getColumns().add(indexColumn);
+        //TODO
+        int key;
+        String value;
+    }
 
-        TableColumn<DTO, Integer> valueColumn = new TableColumn<>("Value");
-        valueColumn.setCellValueFactory(tableData -> new SimpleObjectProperty<>(tableData.getValue().getValue()));
-        bonusTable.getColumns().add(valueColumn);
+    private void initializeBonusTable()
+    {
+        //TODO
+        addColumn("Key", bonusTable, dto -> dto.key);
+        addColumn("Value", bonusTable, dto -> dto.value);
+    }
 
-        TableColumn<DTO, List<Integer>> listColumn = new TableColumn<>("List");
-        listColumn.setCellValueFactory(tableData -> new SimpleObjectProperty<>(tableData.getValue().getIds()));
-        bonusTable.getColumns().add(listColumn);
+    private <DT, T> void addColumn(String name, TableView<DT> tableView, Function<DT, T> function)
+    {
+        TableColumn<DT, T> column = new TableColumn<>(name);
+        column.setCellValueFactory(tableData -> new SimpleObjectProperty<>(function.apply(tableData.getValue())));
+        tableView.getColumns().add(column);
     }
 
     private void initializeHeapTable()
@@ -205,8 +215,10 @@ public class ProgramController
         heapTable.getItems().setAll(programState.getHeap().getMap().entrySet());
         fileList.getItems().setAll(programState.getFileTable().getMap().keySet());
         outputList.getItems().setAll(programState.getProgramOutput().asList());
-        List<DTO> dtos = programState.getBarrierTable().getMap().entrySet().stream().map((e) -> new DTO(e.getKey(), e.getValue().getKey(), e.getValue().getValue())).collect(Collectors.toList());
-        bonusTable.getItems().setAll(dtos);
+        //TODO
+//        List<DTO> dtos = .stream.map(new DTO()).collect(Collectors.toList());
+//        bonusList.getItems().setAll(dtos);
+//        bonusTable.getItems().setAll(dtos);
     }
 
     public void setApplication(GraphicalInterface graphicalInterface)
