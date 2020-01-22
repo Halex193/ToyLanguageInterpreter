@@ -51,7 +51,7 @@ public class GraphicalInterface extends Application
         if (statement == null) return;
         try
         {
-            statement.typeCheck(new ApplicationDictionary<>());
+            // statement.typeCheck(new ApplicationDictionary<>());
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout/program.fxml"));
             Parent programRoot = loader.load();
             ProgramController programController = loader.getController();
@@ -59,7 +59,7 @@ public class GraphicalInterface extends Application
             programController.initialize(statement);
             stage.getScene().setRoot(programRoot);
         }
-        catch (TypeMismatchException e)
+        catch (Exception e)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -68,10 +68,6 @@ public class GraphicalInterface extends Application
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
             alert.showAndWait();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
         }
 
 

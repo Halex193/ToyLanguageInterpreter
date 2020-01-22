@@ -71,7 +71,7 @@ public class ProgramController
 
     private void alertExceptions(Set<ProgramException> exceptions)
     {
-        if(exceptions == null) return;
+        if (exceptions == null) return;
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Thread execution halted!");
@@ -169,16 +169,20 @@ public class ProgramController
 
     static class DTO
     {
-        //TODO
-        int key;
-        String value;
+        String name;
+        String body;
+
+        public DTO(String name, String body)
+        {
+            this.name = name;
+            this.body = body;
+        }
     }
 
     private void initializeBonusTable()
     {
-        //TODO
-        addColumn("Key", bonusTable, dto -> dto.key);
-        addColumn("Value", bonusTable, dto -> dto.value);
+        addColumn("Name", bonusTable, dto -> dto.name);
+        addColumn("Body", bonusTable, dto -> dto.body);
     }
 
     private <DT, T> void addColumn(String name, TableView<DT> tableView, Function<DT, T> function)
@@ -215,10 +219,11 @@ public class ProgramController
         heapTable.getItems().setAll(programState.getHeap().getMap().entrySet());
         fileList.getItems().setAll(programState.getFileTable().getMap().keySet());
         outputList.getItems().setAll(programState.getProgramOutput().asList());
-        //TODO
-//        List<DTO> dtos = .stream.map(new DTO()).collect(Collectors.toList());
-//        bonusList.getItems().setAll(dtos);
-//        bonusTable.getItems().setAll(dtos);
+        List<DTO> dtos = programState.getProcedureTable().getMap().entrySet().stream().map(
+                entry -> new DTO(entry.getKey() + " " + String.join(", ", entry.getValue().getKey()), entry.getValue().getValue().toString())
+        ).collect(Collectors.toList());
+        //        bonusList.getItems().setAll(dtos);
+        bonusTable.getItems().setAll(dtos);
     }
 
     public void setApplication(GraphicalInterface graphicalInterface)

@@ -8,7 +8,9 @@ import model.types.Type;
 import model.values.Value;
 
 import java.io.BufferedReader;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ForkStatement implements Statement
 {
@@ -24,13 +26,17 @@ public class ForkStatement implements Statement
     public ProgramState execute(ProgramState programState) throws ProgramException
     {
         IApplicationStack<Statement> executionStack = new ApplicationStack<>();
-        IApplicationDictionary<String, Value> symbolTable = programState.getSymbolTable().shallowCopy();
+        List<IApplicationDictionary<String, Value>> newSymbolTables = programState.getSymbolTableStack().asList().stream().map(IApplicationDictionary::shallowCopy).collect(Collectors.toList());
+        Collections.reverse(newSymbolTables);
+        IApplicationStack<IApplicationDictionary<String, Value>> symbolTableStack = new ApplicationStack<>();
+        newSymbolTables.forEach(symbolTableStack::push);
         IApplicationList<Value> programOutput = programState.getProgramOutput();
         IApplicationDictionary<String, BufferedReader> fileTable = programState.getFileTable();
         IApplicationHeap<Value> heap = programState.getHeap();
         IApplicationIndex<Pair<Integer, List<Integer>>> barrierTable = programState.getBarrierTable();
+        IApplicationDictionary<String, Pair<List<String>, Statement>> procedureTable = programState.getProcedureTable();
 
-        return new ProgramState(executionStack, symbolTable, programOutput, fileTable, heap, barrierTable, statement);
+        return new ProgramState(executionStack, symbolTableStack, programOutput, fileTable, heap, barrierTable, procedureTable, statement);
     }
 
     @Override

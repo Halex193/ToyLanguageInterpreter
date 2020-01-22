@@ -55,6 +55,12 @@ public class ApplicationStack<T> implements IApplicationStack<T>
     }
 
     @Override
+    public T peek()
+    {
+        return stack.peek();
+    }
+
+    @Override
     public String toString()
     {
         if (stack.isEmpty())

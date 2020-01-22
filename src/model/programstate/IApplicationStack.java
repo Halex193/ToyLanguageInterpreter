@@ -18,4 +18,6 @@ public interface IApplicationStack<T>
     void invalidate();
 
     List<T> asList();
+
+    T peek();
 }

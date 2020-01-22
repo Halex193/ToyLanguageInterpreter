@@ -7,51 +7,69 @@ import model.statements.Statement;
 import model.values.Value;
 
 import java.io.BufferedReader;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProgramState
 {
     private IApplicationStack<Statement> executionStack;
-    private IApplicationDictionary<String, Value> symbolTable;
+
+    private IApplicationStack<IApplicationDictionary<String, Value>> symbolTableStack;
+
     private IApplicationList<Value> programOutput;
     private IApplicationDictionary<String, BufferedReader> fileTable;
     private IApplicationHeap<Value> heap;
     private IApplicationIndex<Pair<Integer, List<Integer>>> barrierTable;
+    private IApplicationDictionary<String, Pair<List<String>, Statement>> procedureTable;
+
+    public IApplicationDictionary<String, Pair<List<String>, Statement>> getProcedureTable()
+    {
+        return procedureTable;
+    }
+
     private Statement program;
     private int id;
     private static int idSeed = 1;
+
     public ProgramState(Statement program)
     {
         this.id = generateId();
         this.executionStack = new ApplicationStack<>();
-        this.symbolTable = new ApplicationDictionary<>();
+        this.symbolTableStack = new ApplicationStack<>();
         this.programOutput = new ApplicationList<>();
         this.fileTable = new ApplicationDictionary<>();
         this.heap = new ApplicationHeap<>();
         this.barrierTable = new ApplicationIndex<>();
+        this.procedureTable = new ApplicationDictionary<>();
         this.program = program.deepCopy();
         this.executionStack.push(program);
+        symbolTableStack.push(new ApplicationDictionary<>());
 
     }
 
     public ProgramState(
             IApplicationStack<Statement> executionStack,
-            IApplicationDictionary<String, Value> symbolTable,
+            IApplicationStack<IApplicationDictionary<String, Value>> symbolTableStack,
             IApplicationList<Value> programOutput,
             IApplicationDictionary<String, BufferedReader> fileTable,
             IApplicationHeap<Value> heap,
             IApplicationIndex<Pair<Integer, List<Integer>>> barrierTable,
+            IApplicationDictionary<String, Pair<List<String>, Statement>> procedureTable,
             Statement program
     )
     {
         this.id = generateId();
         this.executionStack = executionStack;
-        this.symbolTable = symbolTable;
+        this.symbolTableStack = symbolTableStack;
         this.programOutput = programOutput;
         this.fileTable = fileTable;
         this.heap = heap;
         this.program = program.deepCopy();
         this.barrierTable = barrierTable;
+        this.procedureTable = procedureTable;
         this.executionStack.push(program);
     }
 
@@ -65,9 +83,14 @@ public class ProgramState
         return executionStack;
     }
 
+    public IApplicationStack<IApplicationDictionary<String, Value>> getSymbolTableStack()
+    {
+        return symbolTableStack;
+    }
+
     public IApplicationDictionary<String, Value> getSymbolTable()
     {
-        return symbolTable;
+        return symbolTableStack.peek();
     }
 
     public IApplicationList<Value> getProgramOutput()
@@ -113,7 +136,8 @@ public class ProgramState
         try
         {
             return currentStatement.execute(this);
-        } catch (ProgramException exception)
+        }
+        catch (ProgramException exception)
         {
             executionStack.invalidate();
             exception.setProgramStateId(id);
@@ -125,14 +149,15 @@ public class ProgramState
     public String toString()
     {
         return String.format(
-                "Program State ID: %d\nExecution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s\nBarrier Table:\n%s",
+                "Program State ID: %d\nExecution Stack:\n%s\nSymbol Table:\n%s\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s\nBarrier Table:\n%s\nProcedure Table:\n%s",
                 id,
                 executionStack.toString(),
-                symbolTable.toString(),
+                getSymbolTable().toString(),
                 programOutput.toString(),
                 fileTable.toString(),
                 heap.toString(),
-                barrierTable.toString()
+                barrierTable.toString(),
+                procedureTable.toString()
         );
     }
 }

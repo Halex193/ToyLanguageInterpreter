@@ -14,7 +14,7 @@ public class ApplicationDictionary<K, V> implements IApplicationDictionary<K, V>
         map = new ConcurrentHashMap<>(2);
     }
 
-    private ApplicationDictionary(Map<K, V> map)
+    public ApplicationDictionary(Map<K, V> map)
     {
         this.map = new ConcurrentHashMap<>(map);
     }

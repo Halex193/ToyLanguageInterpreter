@@ -29,7 +29,35 @@ public class ProgramUtils
 
     public static List<Statement> generatePrograms()
     {
-        return List.of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9(), program10(), program11());
+        return List.<Statement>of(program1(), program2(), program3(), program4(), program5(), program6(), program7(), program8(), program9(), program10(), program11(), program12());
+    }
+
+    private static Statement program12()
+    {
+        return concatenate(
+                new DefineProcedure("sum", List.of("a", "b"), concatenate(
+                        new VariableDeclaration(new IntType(), "v"),
+                        new AssignStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), "+")),
+                        new PrintStatement(new VariableExpression("v"))
+                )),
+                new DefineProcedure("product", List.of("a", "b"), concatenate(
+                        new VariableDeclaration(new IntType(), "v"),
+                        new AssignStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), "*")),
+                        new PrintStatement(new VariableExpression("v"))
+                )),
+                new VariableDeclaration(new IntType(), "v"),
+                new VariableDeclaration(new IntType(), "w"),
+                new AssignStatement("v", new ValueExpression(new IntValue(2))),
+                new AssignStatement("w", new ValueExpression(new IntValue(5))),
+                new CallProcedure("sum", List.of(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*"), new VariableExpression("w"))),
+                new PrintStatement(new VariableExpression("v")),
+                new ForkStatement(concatenate(
+                        new CallProcedure("product", List.of(new VariableExpression("v"), new VariableExpression("w"))),
+                        new ForkStatement(concatenate(
+                                new CallProcedure("sum", List.of(new VariableExpression("v"), new VariableExpression("w")))
+                        ))
+                ))
+        );
     }
 
     private static Statement program11()
