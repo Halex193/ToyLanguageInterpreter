@@ -23,7 +23,7 @@ public class ProgramUtils
     public static void cleanLogDirectory()
     {
         File[] logFiles = new File("logs").listFiles();
-        if(logFiles == null) return;
+        if (logFiles == null) return;
         for (File logFile : logFiles)
         {
             boolean deleted = logFile.delete();
@@ -38,7 +38,33 @@ public class ProgramUtils
     private static Statement program10()
     {
         return concatenate(
-                new NOPStatement()
+                new VariableDeclaration(new ReferenceType(new IntType()), "a"),
+                new VariableDeclaration(new ReferenceType(new IntType()), "b"),
+                new AllocateHeapStatement("a", new ValueExpression(new IntValue(0))),
+                new AllocateHeapStatement("b", new ValueExpression(new IntValue(0))),
+                new VariableDeclaration(new IntType(), "v"),
+                new WriteHeapStatement("a", new ValueExpression(new IntValue(1))),
+                new WriteHeapStatement("b", new ValueExpression(new IntValue(2))),
+                new ConditionalAssignmentStatement("v",
+                        new RelationalExpression(
+                                new ReadHeapExpression(new VariableExpression("a")),
+                                new ReadHeapExpression(new VariableExpression("b")),
+                                "<"
+                        ),
+                        new ValueExpression(new IntValue(100)),
+                        new ValueExpression(new IntValue(200))
+                ),
+                new PrintStatement(new VariableExpression("v")),
+                new ConditionalAssignmentStatement("v",
+                        new RelationalExpression(
+                                new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("b")),new ValueExpression(new IntValue(2)), "-"),
+                                new ReadHeapExpression(new VariableExpression("a")),
+                                ">"
+                        ),
+                        new ValueExpression(new IntValue(100)),
+                        new ValueExpression(new IntValue(200))
+                ),
+                new PrintStatement(new VariableExpression("v"))
         );
     }
 
