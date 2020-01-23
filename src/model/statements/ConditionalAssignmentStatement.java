@@ -2,6 +2,7 @@ package model.statements;
 
 import exceptions.ProgramException;
 import exceptions.TypeMismatchException;
+import exceptions.VariableNotDeclaredException;
 import model.expressions.Expression;
 import model.programstate.IApplicationDictionary;
 import model.programstate.ProgramState;
@@ -46,6 +47,10 @@ public class ConditionalAssignmentStatement implements Statement
             throw new TypeMismatchException(expression1, new BoolType(), conditionType);
         }
         Type expressionType = typeEnvironment.lookup(var);
+        if (expressionType == null)
+        {
+            throw new TypeMismatchException("Variable not declared: " + var);
+        }
 
         Type expression2Type = expression2.typeCheck(typeEnvironment);
         if (!expression2Type.equals(expressionType))
