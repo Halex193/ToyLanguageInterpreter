@@ -35,7 +35,7 @@ public class ConditionalAssignmentStatement implements Statement
     @Override
     public Statement deepCopy()
     {
-        return new ConditionalAssignmentStatement(var, expression1, expression2, expression3);
+        return new ConditionalAssignmentStatement(var, expression1.deepCopy(), expression2.deepCopy(), expression3.deepCopy());
     }
 
     @Override

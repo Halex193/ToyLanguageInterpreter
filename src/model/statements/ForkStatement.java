@@ -26,8 +26,9 @@ public class ForkStatement implements Statement
         IApplicationList<Value> programOutput = programState.getProgramOutput();
         IApplicationDictionary<String, BufferedReader> fileTable = programState.getFileTable();
         IApplicationHeap<Value> heap = programState.getHeap();
+        IApplicationIndex<Integer> latchTable = programState.getLatchTable();
 
-        return new ProgramState(executionStack, symbolTable, programOutput, fileTable, heap, statement);
+        return new ProgramState(executionStack, symbolTable, programOutput, fileTable, heap, latchTable, statement);
     }
 
     @Override

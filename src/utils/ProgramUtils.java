@@ -57,7 +57,7 @@ public class ProgramUtils
                 new PrintStatement(new VariableExpression("v")),
                 new ConditionalAssignmentStatement("v",
                         new RelationalExpression(
-                                new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("b")),new ValueExpression(new IntValue(2)), "-"),
+                                new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("b")), new ValueExpression(new IntValue(2)), "-"),
                                 new ReadHeapExpression(new VariableExpression("a")),
                                 ">"
                         ),
@@ -71,7 +71,43 @@ public class ProgramUtils
     private static Statement program11()
     {
         return concatenate(
-                new NOPStatement()
+                new VariableDeclaration(new ReferenceType(new IntType()), "v1"),
+                new VariableDeclaration(new ReferenceType(new IntType()), "v2"),
+                new VariableDeclaration(new ReferenceType(new IntType()), "v3"),
+                new VariableDeclaration(new IntType(), "cnt"),
+                new AllocateHeapStatement("v1", new ValueExpression(new IntValue(2))),
+                new AllocateHeapStatement("v2", new ValueExpression(new IntValue(3))),
+                new AllocateHeapStatement("v3", new ValueExpression(new IntValue(4))),
+                new NewLatchStatement("cnt", new ReadHeapExpression(new VariableExpression("v2"))),
+                new ForkStatement(concatenate(
+                        new WriteHeapStatement("v1", new ArithmeticExpression(
+                                new ReadHeapExpression(new VariableExpression("v1")),
+                                new ValueExpression(new IntValue(10)),
+                                "*")),
+                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))),
+                        new CountDownStatement("cnt"),
+                        new ForkStatement(concatenate(
+                                new WriteHeapStatement("v2", new ArithmeticExpression(
+                                        new ReadHeapExpression(new VariableExpression("v2")),
+                                        new ValueExpression(new IntValue(10)),
+                                        "*")),
+                                new PrintStatement(new ReadHeapExpression(new VariableExpression("v2"))),
+                                new CountDownStatement("cnt"),
+                                new ForkStatement(concatenate(
+                                        new WriteHeapStatement("v3", new ArithmeticExpression(
+                                                new ReadHeapExpression(new VariableExpression("v3")),
+                                                new ValueExpression(new IntValue(10)),
+                                                "*")),
+                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v3"))),
+                                        new CountDownStatement("cnt")
+                                ))
+                        ))
+                )),
+                new AwaitStatement("cnt"),
+                new PrintStatement(new ValueExpression(new IntValue(100))),
+                new CountDownStatement("cnt"),
+                new PrintStatement(new ValueExpression(new IntValue(100)))
+
         );
     }
 

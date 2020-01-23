@@ -67,11 +67,11 @@ public class Repository implements IRepository
                 return;
             }
             ProgramState programState = anyProgramState.get();
-            String common = String.format("All Program states\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s\n-------------------",
+            String common = String.format("All Program states\nProgram output:\n%s\nFile Table:\n%s\nHeap:\n%s\nLatch Table:\n%s\n-------------------",
                     programState.getProgramOutput(),
                     programState.getFileTable(),
-                    programState.getHeap()
-                    //TODO
+                    programState.getHeap(),
+                    programState.getLatchTable()
             );
             printWriter.println(common);
             printWriter.flush();

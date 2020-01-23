@@ -51,9 +51,6 @@ public class ProgramController
     private ListView<String> fileList;
 
     @FXML
-    private ListView<DTO> bonusList;
-
-    @FXML
     private TableView<DTO> bonusTable;
 
 
@@ -169,17 +166,19 @@ public class ProgramController
 
     static class DTO
     {
-        //TODO
-        int key;
-        String value;
+        int location;
+        int value;
 
-        //TODO
+        public DTO(int location, int value)
+        {
+            this.location = location;
+            this.value = value;
+        }
     }
 
     private void initializeBonusTable()
     {
-        //TODO
-        addColumn("Key", bonusTable, dto -> dto.key);
+        addColumn("Location", bonusTable, dto -> dto.location);
         addColumn("Value", bonusTable, dto -> dto.value);
     }
 
@@ -217,10 +216,9 @@ public class ProgramController
         heapTable.getItems().setAll(programState.getHeap().getMap().entrySet());
         fileList.getItems().setAll(programState.getFileTable().getMap().keySet());
         outputList.getItems().setAll(programState.getProgramOutput().asList());
-        //TODO
-       // List<DTO> dtos = .stream().map(e -> new DTO()).collect(Collectors.toList());
+       List<DTO> dtos = programState.getLatchTable().getMap().entrySet().stream().map(e -> new DTO(e.getKey(), e.getValue())).collect(Collectors.toList());
        // bonusList.getItems().setAll(dtos);
-       // bonusTable.getItems().setAll(dtos);
+       bonusTable.getItems().setAll(dtos);
     }
 
     public void setApplication(GraphicalInterface graphicalInterface)
