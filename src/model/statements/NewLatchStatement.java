@@ -33,8 +33,6 @@ public class NewLatchStatement implements Statement
             throw new ParameterTypeMismatchException(new IntType(), value);
         }
 
-        int number = ((IntValue) value).getValue();
-
         Value lookup = symbolTable.lookup(var);
         if (lookup == null)
         {
@@ -45,6 +43,8 @@ public class NewLatchStatement implements Statement
         {
             throw new ParameterTypeMismatchException(new IntType(), lookup);
         }
+
+        int number = ((IntValue) value).getValue();
         int address;
         synchronized (programState.getLatchTable())
         {
@@ -70,6 +70,10 @@ public class NewLatchStatement implements Statement
         }
 
         Type lookup = typeEnvironment.lookup(var);
+        if (lookup == null)
+        {
+            throw new TypeMismatchException("Variable not declared");
+        }
         if (!lookup.equals(new IntType()))
         {
             throw new TypeMismatchException("Variable is not of type int");

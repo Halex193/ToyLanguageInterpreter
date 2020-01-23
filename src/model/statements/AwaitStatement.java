@@ -37,6 +37,7 @@ public class AwaitStatement implements Statement
         {
             throw new ParameterTypeMismatchException(new IntType(), lookup);
         }
+
         int address = ((IntValue) lookup).getValue();
         Integer count;
         synchronized (programState.getLatchTable())

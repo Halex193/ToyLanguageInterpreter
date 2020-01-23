@@ -74,7 +74,7 @@ public class IfStatement implements Statement
     @Override
     public String toString()
     {
-        return "if " + condition.toString() + " then " + thenStatement.toString() + " else " + elseStatement
+        return "if (" + condition.toString() + ") then " + thenStatement.toString() + " else " + elseStatement
                 .toString();
     }
 }
